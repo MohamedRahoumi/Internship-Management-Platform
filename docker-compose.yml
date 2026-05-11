@@ -1,0 +1,65 @@
+services:
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog-stagaire
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+  backend:
+    build: ./backend
+    container_name: backend-stagaire
+    ports:
+      - "8080:8000"
+    volumes:
+      - ./backend:/var/www/html  
+    depends_on:
+      - postgres
+      - mailhog
+    command: sh -c "[ -d vendor ] || composer install --no-interaction; php artisan serve --host=0.0.0.0 --port=8000"
+
+  
+  postgres:
+    image: postgres:17
+    container_name: postgres-stagaire
+    restart: always
+    environment:
+      POSTGRES_DB: stagaire
+      POSTGRES_USER: ocpms
+      POSTGRES_PASSWORD: 20032026
+    ports:
+      - "2004:5432"
+    volumes:
+      - pgtables:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin-stagaire
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ocpms@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: 20032026
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+
+  frontend:
+    image: node:20
+    container_name: frontend-stagaire
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    command: sh -c "npm install && npm start"
+    environment:
+      - WDS_SOCKET_PORT=0
+      - WATCHPACK_POLLING=true
+
+volumes:
+  pgtables:
+
+
+
