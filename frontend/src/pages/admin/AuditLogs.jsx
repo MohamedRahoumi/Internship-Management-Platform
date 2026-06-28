@@ -60,7 +60,7 @@ const AuditLogs = () => {
     <div>
       <PageHeader title="Journal d'audit" />
 
-      <div className="bg-white border border-slate-200 rounded-md p-4 mb-6">
+      <div className="page-card-sm mb-6">
         <div className="flex flex-wrap gap-3 items-end">
           <div className="flex-1 min-w-[200px]">
             <label className="label-field">Recherche</label>
@@ -84,7 +84,7 @@ const AuditLogs = () => {
       </div>
 
       {loading ? <Loading /> : (
-        <div className="bg-white border border-slate-200 rounded-md overflow-hidden">
+        <div className="card overflow-hidden">
           <Table>
             <Table.Head>
               <Table.Header>Utilisateur</Table.Header>
@@ -99,15 +99,15 @@ const AuditLogs = () => {
               {logs.length === 0 ? <Table.Empty colSpan={7} message="Aucun journal d'audit trouvé" /> : (
                 logs.map((log) => (
                   <Table.Row key={log.id}>
-                    <Table.Cell className="font-medium text-slate-800">{log.user ? `${log.user.nom} ${log.user.prenom}` : 'Système'}</Table.Cell>
-                    <Table.Cell className="text-slate-500">{log.user?.email || '—'}</Table.Cell>
+                    <Table.Cell className="font-medium text-ocp-800">{log.user ? `${log.user.nom} ${log.user.prenom}` : 'Système'}</Table.Cell>
+                    <Table.Cell className="text-ocp-500">{log.user?.email || '—'}</Table.Cell>
                     <Table.Cell>
                       {log.user && <Badge color={roleColors[log.user.role] || 'slate'}>{roleLabels[log.user.role] || log.user.role}</Badge>}
                     </Table.Cell>
                     <Table.Cell><Badge color={actionColors[log.action] || 'slate'}>{actionLabels[log.action] || log.action}</Badge></Table.Cell>
-                    <Table.Cell className="text-slate-600">{modelLabels[log.model_type] || log.model_type || '—'}</Table.Cell>
-                    <Table.Cell className="text-slate-500 max-w-xs truncate" title={log.description}>{log.description}</Table.Cell>
-                    <Table.Cell className="text-slate-500 whitespace-nowrap">
+                    <Table.Cell className="text-ocp-600">{modelLabels[log.model_type] || log.model_type || '—'}</Table.Cell>
+                    <Table.Cell className="text-ocp-500 max-w-xs truncate" title={log.description}>{log.description}</Table.Cell>
+                    <Table.Cell className="text-ocp-500 whitespace-nowrap">
                       {log.created_at ? new Date(log.created_at).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—'}
                     </Table.Cell>
                   </Table.Row>

@@ -60,7 +60,7 @@ const Evaluation = () => {
     <div className="max-w-2xl mx-auto">
       <PageHeader title="Évaluation de stagiaire" />
 
-      <form onSubmit={handleSubmit} className="bg-white border border-slate-200 rounded-md p-6 space-y-5">
+      <form onSubmit={handleSubmit} className="bg-white border border-ocp-100 rounded-xl p-6 space-y-5">
         <div>
           <label className="label-field">Stagiaire</label>
           <select
@@ -81,8 +81,8 @@ const Evaluation = () => {
         {criteria.map((criterion) => (
           <div key={criterion.key}>
             <div className="flex justify-between items-center mb-1.5">
-              <label className="text-sm font-medium text-slate-700">{criterion.label}</label>
-              <span className="text-sm font-bold text-blue-700">{scores[criterion.key] || 0}/100</span>
+              <label className="text-sm font-medium text-ocp-700">{criterion.label}</label>
+              <span className="text-sm font-bold text-ocp-500">{scores[criterion.key] || 0}/100</span>
             </div>
             <input
               type="range"
@@ -92,7 +92,7 @@ const Evaluation = () => {
               onChange={(e) => setScores({ ...scores, [criterion.key]: parseInt(e.target.value) })}
               className="w-full h-1.5 bg-slate-200 rounded-full appearance-none cursor-pointer accent-blue-700"
             />
-            <div className="flex justify-between text-xs text-slate-400">
+            <div className="flex justify-between text-xs text-ocp-400">
               <span>0</span>
               <span>100</span>
             </div>

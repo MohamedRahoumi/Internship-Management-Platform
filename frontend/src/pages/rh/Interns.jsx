@@ -23,11 +23,11 @@ const Interns = () => {
       <PageHeader title="Stagiaires" />
 
       {interns.length === 0 ? (
-        <div className="bg-white border border-slate-200 rounded-md p-12 text-center text-slate-400 text-sm">
+        <div className="bg-white border border-ocp-100 rounded-xl p-12 text-center text-ocp-400 text-sm">
           Aucun stagiaire pour le moment.
         </div>
       ) : (
-        <div className="bg-white border border-slate-200 rounded-md overflow-hidden">
+        <div className="bg-white border border-ocp-100 rounded-xl overflow-hidden">
           <Table>
             <Table.Head>
               <Table.Header>Stagiaire</Table.Header>
@@ -41,12 +41,12 @@ const Interns = () => {
             <Table.Body>
               {interns.map((intern) => (
                 <Table.Row key={intern.id}>
-                  <Table.Cell className="font-medium text-slate-800">{intern.user?.nom} {intern.user?.prenom}</Table.Cell>
-                  <Table.Cell className="text-slate-500">{intern.user?.cin || '—'}</Table.Cell>
-                  <Table.Cell className="text-slate-500">{intern.user?.email}</Table.Cell>
-                  <Table.Cell className="text-slate-600">{intern.department?.name || '—'}</Table.Cell>
-                  <Table.Cell className="text-slate-600">{intern.supervisor ? `${intern.supervisor.nom} ${intern.supervisor.prenom}` : '—'}</Table.Cell>
-                  <Table.Cell className="text-slate-500 whitespace-nowrap">
+                  <Table.Cell className="font-medium text-ocp-800">{intern.user?.nom} {intern.user?.prenom}</Table.Cell>
+                  <Table.Cell className="text-ocp-500">{intern.user?.cin || '—'}</Table.Cell>
+                  <Table.Cell className="text-ocp-500">{intern.user?.email}</Table.Cell>
+                  <Table.Cell className="text-ocp-600">{intern.department?.name || '—'}</Table.Cell>
+                  <Table.Cell className="text-ocp-600">{intern.supervisor ? `${intern.supervisor.nom} ${intern.supervisor.prenom}` : '—'}</Table.Cell>
+                  <Table.Cell className="text-ocp-500 whitespace-nowrap">
                     {intern.date_debut ? new Date(intern.date_debut).toLocaleDateString('fr-FR') : '—'}
                     {' → '}
                     {intern.date_fin ? new Date(intern.date_fin).toLocaleDateString('fr-FR') : '—'}

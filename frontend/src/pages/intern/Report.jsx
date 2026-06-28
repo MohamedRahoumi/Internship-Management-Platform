@@ -46,31 +46,31 @@ const Report = () => {
     <div className="max-w-lg mx-auto">
       <PageHeader title="Mon rapport de stage" />
 
-      <div className="bg-white border border-slate-200 rounded-md p-6">
+      <div className="bg-white border border-ocp-100 rounded-xl p-6">
         {existingReport?.uploaded ? (
           <div className="text-center py-6">
             <div className="w-14 h-14 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <svg className="w-7 h-7 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
             </div>
-            <h2 className="text-base font-semibold text-slate-900 mb-1">Rapport déjà soumis</h2>
-            <p className="text-sm text-slate-500">Votre rapport a déjà été téléchargé.</p>
+            <h2 className="text-base font-semibold text-ocp-800 mb-1">Rapport déjà soumis</h2>
+            <p className="text-sm text-ocp-500">Votre rapport a déjà été téléchargé.</p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label className="label-field mb-2">Télécharger votre rapport (PDF)</label>
-              <div className="border-2 border-dashed border-slate-300 rounded-md p-8 text-center hover:border-blue-400 transition-colors cursor-pointer"
+              <div className="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center hover:border-blue-400 transition-colors cursor-pointer"
                 onClick={() => document.getElementById('report-file')?.click()}
               >
                 <input type="file" accept=".pdf" onChange={(e) => setFile(e.target.files[0])} className="hidden" id="report-file" />
                 <div className="flex flex-col items-center gap-2">
-                  <div className="w-10 h-10 bg-slate-100 rounded-md flex items-center justify-center text-slate-400">
+                  <div className="w-10 h-10 bg-ocp-50 rounded-xl flex items-center justify-center text-ocp-400">
                     <IconUpload />
                   </div>
-                  <p className="text-sm text-slate-500">
+                  <p className="text-sm text-ocp-500">
                     {file ? file.name : 'Cliquez pour sélectionner un fichier PDF'}
                   </p>
-                  {file && <p className="text-xs text-slate-400">{(file.size / 1024 / 1024).toFixed(2)} MB</p>}
+                  {file && <p className="text-xs text-ocp-400">{(file.size / 1024 / 1024).toFixed(2)} MB</p>}
                 </div>
               </div>
             </div>

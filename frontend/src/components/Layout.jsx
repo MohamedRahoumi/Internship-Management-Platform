@@ -79,10 +79,10 @@ const Layout = () => {
       <Link
         to={item.path}
         onClick={() => setSidebarOpen(false)}
-        className={`flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-md transition-colors ${
+        className={`flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-xl transition-all duration-200 ${
           active
-            ? 'bg-blue-700 text-white'
-            : 'text-slate-300 hover:bg-navy-800 hover:text-white'
+            ? 'bg-ocp-500 text-white shadow-sm'
+            : 'text-ocp-100 hover:bg-ocp-600 hover:text-white'
         }`}
       >
         {Icon && <Icon className="shrink-0" />}
@@ -92,27 +92,25 @@ const Layout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen bg-ocp-50">
       {sidebarOpen && (
         <div className="fixed inset-0 z-30 bg-black/50 lg:hidden" onClick={() => setSidebarOpen(false)} />
       )}
 
-      <aside className={`fixed inset-y-0 left-0 z-40 w-64 bg-navy-900 transform transition-transform duration-200 lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-        <div className="flex items-center h-14 px-5 border-b border-navy-700">
+      <aside className={`fixed inset-y-0 left-0 z-40 w-64 bg-ocp-800 transform transition-transform duration-200 lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <div className="flex items-center h-14 px-5 border-b border-ocp-600">
           <Link to="/" className="flex items-center gap-2.5">
-            <div className="w-7 h-7 bg-blue-600 rounded flex items-center justify-center">
-              <span className="text-white text-xs font-bold">OCP</span>
-            </div>
+            <img src="/ocp.svg" alt="OCP Group" className="h-7 w-auto" />
             <span className="text-white text-sm font-semibold tracking-tight">Gestion Stagiaires</span>
           </Link>
         </div>
 
-        <div className="px-3 py-2 border-b border-navy-700">
-          <p className="text-xs text-slate-400">Connecté en tant que</p>
+        <div className="px-3 py-2 border-b border-ocp-600">
+          <p className="text-xs text-ocp-100/60">Connecté en tant que</p>
           <p className="text-sm font-medium text-white truncate mt-0.5">
             {user?.nom} {user?.prenom}
           </p>
-          <span className="inline-block mt-1 px-2 py-0.5 text-xs font-medium rounded bg-navy-700 text-slate-300">
+          <span className="inline-block mt-1 px-2 py-0.5 text-xs font-medium rounded-lg bg-ocp-600 text-ocp-100">
             {roleLabels[user?.role] || user?.role}
           </span>
         </div>
@@ -123,10 +121,10 @@ const Layout = () => {
           ))}
         </nav>
 
-        <div className="absolute bottom-0 left-0 right-0 p-3 border-t border-navy-700">
+        <div className="absolute bottom-0 left-0 right-0 p-3 border-t border-ocp-600 bg-ocp-800">
           <button
             onClick={handleLogout}
-            className="flex items-center gap-3 w-full px-4 py-2.5 text-sm font-medium text-slate-400 hover:text-white hover:bg-navy-800 rounded-md transition-colors"
+            className="flex items-center gap-3 w-full px-4 py-2.5 text-sm font-medium text-ocp-100 hover:text-white hover:bg-ocp-600 rounded-xl transition-all duration-200"
           >
             <IconLogout />
             Déconnexion
@@ -135,11 +133,11 @@ const Layout = () => {
       </aside>
 
       <div className="lg:pl-64">
-        <header className="sticky top-0 z-20 bg-white border-b border-slate-200">
+        <header className="sticky top-0 z-20 bg-white border-b border-ocp-100 shadow-sm">
           <div className="flex items-center justify-between h-14 px-4 lg:px-6">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="lg:hidden text-slate-500 hover:text-slate-700 -ml-1 p-1"
+              className="lg:hidden text-ocp-500 hover:text-ocp-600 -ml-1 p-1"
             >
               <IconMenu />
             </button>
@@ -148,12 +146,12 @@ const Layout = () => {
 
             <div className="flex items-center gap-4">
               <div className="text-right hidden sm:block">
-                <p className="text-sm font-medium text-slate-800">{user?.nom} {user?.prenom}</p>
-                <p className="text-xs text-slate-500">{user?.email}</p>
+                <p className="text-sm font-medium text-ocp-800">{user?.nom} {user?.prenom}</p>
+                <p className="text-xs text-ocp-500">{user?.email}</p>
               </div>
               <button
                 onClick={handleLogout}
-                className="text-sm font-medium text-slate-500 hover:text-red-700 px-3 py-1.5 rounded hover:bg-red-50 transition-colors"
+                className="text-sm font-medium text-ocp-500 hover:text-red-700 px-3 py-1.5 rounded-xl hover:bg-red-50 transition-colors"
               >
                 Déconnexion
               </button>
@@ -170,5 +168,3 @@ const Layout = () => {
 };
 
 export default Layout;
-
-

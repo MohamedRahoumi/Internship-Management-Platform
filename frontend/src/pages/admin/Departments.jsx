@@ -48,35 +48,35 @@ const Departments = () => {
         <Button onClick={openCreate}>+ Nouveau département</Button>
       </PageHeader>
 
-      <div className="bg-white border border-slate-200 rounded-md p-4 mb-6">
+      <div className="page-card-sm mb-6">
         <SearchInput value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Rechercher par nom..." className="max-w-md" />
       </div>
 
       {loading ? <Loading /> : (
         departments.length === 0 ? (
-          <div className="bg-white border border-slate-200 rounded-md p-12 text-center text-slate-400 text-sm">
+          <div className="page-card p-12 text-center text-ocp-400 text-sm">
             Aucun département trouvé
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {departments.map((dept) => (
-              <div key={dept.id} className="bg-white border border-slate-200 rounded-md p-5">
+              <div key={dept.id} className="card p-5">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 bg-slate-100 rounded-md flex items-center justify-center text-slate-500">
+                    <div className="w-9 h-9 bg-ocp-50 rounded-md flex items-center justify-center text-ocp-500">
                       <IconBuilding />
                     </div>
                     <div>
-                      <h3 className="text-sm font-semibold text-slate-800">{dept.name}</h3>
+                      <h3 className="text-sm font-semibold text-ocp-800">{dept.name}</h3>
                       {dept.users_count !== undefined && (
-                        <p className="text-xs text-slate-400">{dept.users_count} membre{dept.users_count > 1 ? 's' : ''}</p>
+                        <p className="text-xs text-ocp-400">{dept.users_count} membre{dept.users_count > 1 ? 's' : ''}</p>
                       )}
                     </div>
                   </div>
                 </div>
-                {dept.description && <p className="text-sm text-slate-500 mb-4">{dept.description}</p>}
-                <div className="flex gap-3 pt-3 border-t border-slate-100">
-                  <button onClick={() => openEdit(dept)} className="text-sm font-medium text-blue-700 hover:text-blue-800">Modifier</button>
+                {dept.description && <p className="text-sm text-ocp-500 mb-4">{dept.description}</p>}
+                <div className="flex gap-3 pt-3 border-t border-ocp-50">
+                  <button onClick={() => openEdit(dept)} className="text-sm font-medium link-ocp">Modifier</button>
                   <button onClick={() => handleDelete(dept.id)} className="text-sm font-medium text-red-700 hover:text-red-800">Supprimer</button>
                 </div>
               </div>

@@ -23,11 +23,11 @@ const AttendanceHistory = () => {
       <PageHeader title="Mes présences" />
 
       {attendance.length === 0 ? (
-        <div className="bg-white border border-slate-200 rounded-md p-12 text-center">
-          <p className="text-sm text-slate-400">Aucune présence enregistrée pour le moment.</p>
+        <div className="bg-white border border-ocp-100 rounded-xl p-12 text-center">
+          <p className="text-sm text-ocp-400">Aucune présence enregistrée pour le moment.</p>
         </div>
       ) : (
-        <div className="bg-white border border-slate-200 rounded-md overflow-hidden">
+        <div className="bg-white border border-ocp-100 rounded-xl overflow-hidden">
           <Table>
             <Table.Head>
               <Table.Header>Date</Table.Header>
@@ -38,13 +38,13 @@ const AttendanceHistory = () => {
             <Table.Body>
               {attendance.map((entry) => (
                 <Table.Row key={entry.id}>
-                  <Table.Cell className="font-medium text-slate-800">
+                  <Table.Cell className="font-medium text-ocp-800">
                     {entry.date ? new Date(entry.date).toLocaleDateString('fr-FR') : '—'}
                   </Table.Cell>
-                  <Table.Cell className="text-slate-500">
+                  <Table.Cell className="text-ocp-500">
                     {entry.check_in ? new Date(entry.check_in).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) : '—'}
                   </Table.Cell>
-                  <Table.Cell className="text-slate-500">
+                  <Table.Cell className="text-ocp-500">
                     {entry.check_out ? new Date(entry.check_out).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) : '—'}
                   </Table.Cell>
                   <Table.Cell>{statusBadge(entry.status).badge}</Table.Cell>

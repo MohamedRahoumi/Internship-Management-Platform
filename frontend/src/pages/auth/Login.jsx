@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -16,8 +16,22 @@ const Login = () => {
   const login = useAuthStore((s) => s.login);
   const loading = useAuthStore((s) => s.loading);
   const [error, setError] = useState('');
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [visible, setVisible] = useState({});
+  const videoRef = useRef(null);
 
   const { register, handleSubmit, formState: { errors } } = useForm({ resolver: zodResolver(schema) });
+
+  useEffect(() => {
+    const ids = ['card', 'card-0', 'card-1', 'card-2'];
+    ids.forEach((id, i) => {
+      const delay = id === 'card' ? 150 : 400 + i * 100;
+      setTimeout(() => setVisible((v) => ({ ...v, [id]: true })), 80 + delay);
+    });
+    if (videoRef.current) {
+      videoRef.current.play().catch(() => {});
+    }
+  }, []);
 
   const onSubmit = async (data) => {
     setError('');
@@ -35,64 +49,191 @@ const Login = () => {
     }
   };
 
+  const fadeCls = (id) =>
+    `transition-all duration-700 ease-out ${
+      visible[id] ? 'opacity-100 translate-y-0 blur-0' : 'opacity-0 translate-y-6 blur-sm'
+    }`;
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-slate-100 px-4">
-      <div className="w-full max-w-sm">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-700 rounded-md mb-4">
-            <span className="text-white text-lg font-bold">OCP</span>
+    <section className="relative min-h-screen overflow-hidden flex flex-col bg-white">
+      {/* Video Background */}
+      <div className="absolute inset-0 w-full h-full scale-105 origin-center z-0">
+        <video
+          ref={videoRef}
+          muted
+          playsInline
+          crossOrigin="anonymous"
+          className="w-full h-full object-cover"
+          src="https://plugin-assets.open-design.ai/plugins/evergreen-finance/hf_20260517_070729_32a7eb4e-d6e2-4571-badc-91b4dab1ecbe-2db9b1.mp4"
+        />
+      </div>
+      <div className="absolute inset-0 bg-gradient-to-b from-white/92 via-white/75 to-ocp-50/90 z-10" />
+
+      <div className="relative z-20 flex-1 flex flex-col justify-between min-h-screen">
+        {/* Navbar */}
+        <nav className="flex items-center justify-between px-5 sm:px-10 lg:px-16 py-6">
+          <div className="flex items-center gap-2.5">
+            <img src="/ocp.svg" alt="OCP" className="h-8 w-auto rounded-md" />
+            
           </div>
-          <h1 className="text-xl font-bold text-slate-900">Gestion Stagiaires</h1>
-          <p className="text-sm text-slate-500 mt-1">Connectez-vous à votre compte</p>
+          <div className="hidden md:flex items-center gap-8">
+            <a href="/" className="text-sm font-medium text-ocp-700/80 hover:text-ocp-500 transition-colors">Accueil</a>
+            <a href="/" className="text-sm font-medium text-ocp-700/80 hover:text-ocp-500 transition-colors">À propos</a>
+            <a href="/" className="text-sm font-medium text-ocp-700/80 hover:text-ocp-500 transition-colors">Fonctionnalités</a>
+          </div>
+          <div className="hidden md:flex items-center gap-3">
+            <a href="/register" className="inline-flex items-center gap-2 bg-ocp-700 text-white text-sm font-medium px-6 py-3 rounded-xl hover:bg-ocp-600 transition-all hover:-translate-y-0.5 hover:shadow-md hover:shadow-ocp-700/20">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 2L12 22M5 9L12 2 19 9" strokeLinejoin="round"/></svg>
+              S'inscrire
+            </a>
+          </div>
+          <button className="md:hidden p-1" onClick={() => setMobileOpen(!mobileOpen)} aria-label="Menu">
+            {mobileOpen ? (
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#02421D" strokeWidth="2" strokeLinecap="round">
+                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            ) : (
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#02421D" strokeWidth="2" strokeLinecap="round">
+                <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+              </svg>
+            )}
+          </button>
+          {mobileOpen && (
+            <div className="absolute top-[76px] left-4 right-4 z-30 bg-white/98 backdrop-blur-xl rounded-2xl shadow-xl shadow-ocp-500/10 border border-ocp-500/10 p-5 flex flex-col gap-3.5 md:hidden">
+              <a href="/" className="text-base font-medium text-ocp-700 py-2" onClick={() => setMobileOpen(false)}>Accueil</a>
+              <a href="/" className="text-base font-medium text-ocp-700 py-2" onClick={() => setMobileOpen(false)}>À propos</a>
+              <a href="/" className="text-base font-medium text-ocp-700 py-2" onClick={() => setMobileOpen(false)}>Fonctionnalités</a>
+              <a href="/register" className="btn-dark justify-center text-center" onClick={() => setMobileOpen(false)}>S'inscrire</a>
+            </div>
+          )}
+        </nav>
+
+        {/* Login Card */}
+        <div className="flex-1 flex items-center justify-center px-5 py-10">
+          <div className={`bg-white/96 backdrop-blur-xl rounded-3xl shadow-[0_30px_80px_rgba(2,66,29,0.12),0_10px_30px_rgba(0,0,0,0.04)] border border-ocp-500/10 p-8 sm:p-12 lg:p-14 w-full max-w-md transition-all duration-300 hover:-translate-y-1 ${fadeCls('card')}`}>
+            <div className="flex justify-center mb-3">
+              <img src="/ocp.svg" alt="OCP" className="h-10 w-auto" />
+            </div>
+            <h2 className="font-cooper-medium text-ocp-700 text-3xl mb-1 text-center">Bienvenue</h2>
+            <p className="text-ocp-600/80 text-sm mb-7 text-center">Connectez-vous pour accéder à votre espace personnel.</p>
+
+            <Alert type="error">{error}</Alert>
+
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4.5">
+              <div>
+                <label className="block text-xs font-semibold text-ocp-700 mb-1.5">Adresse e-mail</label>
+                <input
+                  type="email"
+                  {...register('email')}
+                  className={`w-full px-4 py-3 rounded-xl border text-sm transition-all outline-none bg-ocp-50 focus:bg-white focus:border-ocp-500 focus:ring-3 focus:ring-ocp-500/15 ${errors.email ? 'border-red-400' : 'border-ocp-200'}`}
+                  placeholder="vous@ocp.com"
+                />
+                {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-ocp-700 mb-1.5">Mot de passe</label>
+                <input
+                  type="password"
+                  {...register('password')}
+                  className={`w-full px-4 py-3 rounded-xl border text-sm transition-all outline-none bg-ocp-50 focus:bg-white focus:border-ocp-500 focus:ring-3 focus:ring-ocp-500/15 ${errors.password ? 'border-red-400' : 'border-ocp-200'}`}
+                  placeholder="••••••••"
+                />
+                {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
+              </div>
+              <div className="flex items-center justify-between text-xs my-4">
+                <label className="flex items-center gap-1.5 text-ocp-600 cursor-pointer">
+                  <input type="checkbox" defaultChecked className="accent-ocp-500" /> Se souvenir de moi
+                </label>
+                <a href="#" className="text-ocp-500 font-medium hover:text-ocp-600 hover:underline">Mot de passe oublié ?</a>
+              </div>
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full inline-flex items-center justify-center gap-2 bg-ocp-500 text-white text-sm font-medium px-6 py-3 rounded-xl hover:bg-ocp-600 transition-all hover:-translate-y-0.5 hover:shadow-md hover:shadow-ocp-500/25 disabled:opacity-60"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 2L12 22M5 9L12 2 19 9" strokeLinejoin="round"/></svg>
+                {loading ? 'Connexion...' : 'Se connecter'}
+              </button>
+            </form>
+
+            <div className="flex items-center gap-4 my-5 text-ocp-500/60 text-xs">
+              <span className="flex-1 h-px bg-ocp-200" />
+              <span>ou</span>
+              <span className="flex-1 h-px bg-ocp-200" />
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => alert('Connexion via Microsoft en cours...')}
+                className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border border-ocp-200 bg-white text-xs font-medium text-ocp-700 hover:bg-ocp-50 hover:border-ocp-500 transition-colors"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#00843D"><path d="M11.4 12.2H0V0h11.4v12.2zM24 12.2H12.6V0H24v12.2zM11.4 24H0V11.8h11.4V24zM24 24H12.6V11.8H24V24z"/></svg>
+                Microsoft
+              </button>
+              <button
+                type="button"
+                onClick={() => alert('Connexion via Google en cours...')}
+                className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border border-ocp-200 bg-white text-xs font-medium text-ocp-700 hover:bg-ocp-50 hover:border-ocp-500 transition-colors"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#00843D"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                Google
+              </button>
+            </div>
+
+            <p className="text-center mt-5 text-sm text-ocp-600">
+              Pas encore de compte ?{' '}
+              <Link to="/register" className="text-ocp-500 font-semibold hover:underline">
+                Créer un compte
+              </Link>
+            </p>
+          </div>
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-md p-6">
-          <Alert type="error">{error}</Alert>
-
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div>
-              <label className="label-field">Email</label>
-              <input
-                type="email"
-                {...register('email')}
-                className={`input-field ${errors.email ? 'input-error' : ''}`}
-                placeholder="vous@exemple.com"
-              />
-              {errors.email && <p className="error-text">{errors.email.message}</p>}
-            </div>
-
-            <div>
-              <label className="label-field">Mot de passe</label>
-              <input
-                type="password"
-                {...register('password')}
-                className={`input-field ${errors.password ? 'input-error' : ''}`}
-                placeholder="••••••••"
-              />
-              {errors.password && <p className="error-text">{errors.password.message}</p>}
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn-primary w-full"
+        {/* Floating KPI Cards */}
+        <div className="flex items-end justify-center gap-3 px-4 pb-12 flex-wrap">
+          {[
+            { label: 'Stages Actifs', badge: '+12%', badgeCls: 'text-emerald-600 bg-emerald-50', main: '1 240', extra: ['Jan', 'Fév', 'Mar', 'Avr'] },
+            { label: 'Candidatures', badge: '2 854', badgeCls: 'text-ocp-500 bg-ocp-50', main: null, extra2: ['UM6P / Écoles', '64%', 'Universités', '28%'] },
+            { label: 'Satisfaction', badge: '94.5%', badgeCls: 'text-emerald-600 bg-emerald-50', main: 'Attestation', extra: 'Génération immédiate' },
+          ].map((card, i) => (
+            <div
+              key={i}
+              className={`bg-white/96 backdrop-blur-xl rounded-2xl shadow-[0_20px_60px_rgba(2,66,29,0.08)] border border-ocp-500/6 p-5 min-w-[140px] flex-1 basis-[160px] max-w-[220px] ${fadeCls('card-' + i)}`}
             >
-              {loading ? 'Connexion...' : 'Se connecter'}
-            </button>
-          </form>
-
-          <p className="text-center mt-6 text-sm text-slate-500">
-            Pas encore de compte ?{' '}
-            <Link to="/register" className="text-blue-700 hover:text-blue-800 font-medium">
-              S'inscrire
-            </Link>
-          </p>
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-ocp-700">{card.label}</span>
+                <span className={`text-[0.72rem] font-semibold px-2.5 py-1 rounded-full ${card.badgeCls}`}>{card.badge}</span>
+              </div>
+              {card.main && <div className="font-cooper-medium text-2xl font-bold text-ocp-700 my-1.5">{card.main}</div>}
+              {card.extra && Array.isArray(card.extra) && (
+                <div className="flex justify-between text-[0.65rem] text-ocp-600 mt-1.5">
+                  {card.extra.map((m, j) => <span key={j}>{m}</span>)}
+                </div>
+              )}
+              {card.extra2 && card.extra2.map((item, j) => (
+                <div key={j} className="flex justify-between text-[0.75rem] text-ocp-600 my-1.5">
+                  {j % 2 === 0 && <span>{item}</span>}
+                  {j % 2 === 1 && <b className="text-ocp-700">{item}</b>}
+                </div>
+              ))}
+              {typeof card.extra === 'string' && (
+                <div className="text-[0.7rem] text-ocp-600 mt-1">{card.extra}</div>
+              )}
+            </div>
+          ))}
         </div>
       </div>
-    </div>
+
+      {/* Footer */}
+      <footer className="bg-ocp-900 text-white/60 py-8 px-5 text-xs text-center border-t border-white/5">
+        &copy; 2026 OCP Group — Portail des Stages
+        <a href="#" className="text-white/50 hover:text-white ml-2 mr-2 transition-colors">Mentions légales</a>
+        <a href="#" className="text-white/50 hover:text-white mr-2 transition-colors">Confidentialité</a>
+        <a href="#" className="text-white/50 hover:text-white transition-colors">Support</a>
+      </footer>
+    </section>
   );
 };
 
 export default Login;
-
-

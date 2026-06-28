@@ -103,12 +103,12 @@ const Application = () => {
   if (submitted) {
     return (
       <div className="max-w-lg mx-auto text-center py-16">
-        <div className="bg-white border border-slate-200 rounded-md p-8">
+        <div className="bg-white border border-ocp-100 rounded-xl p-8">
           <div className="w-14 h-14 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <svg className="w-7 h-7 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
           </div>
-          <h2 className="text-lg font-bold text-slate-900 mb-2">Candidature soumise !</h2>
-          <p className="text-sm text-slate-500">Votre demande de stage a été envoyée avec succès. Vous recevrez une réponse sous peu.</p>
+          <h2 className="text-lg font-bold text-ocp-800 mb-2">Candidature soumise !</h2>
+          <p className="text-sm text-ocp-500">Votre demande de stage a été envoyée avec succès. Vous recevrez une réponse sous peu.</p>
         </div>
       </div>
     );
@@ -117,12 +117,12 @@ const Application = () => {
   if (existing) {
     return (
       <div className="max-w-lg mx-auto text-center py-16">
-        <div className="bg-white border border-slate-200 rounded-md p-8">
-          <div className="w-14 h-14 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg className="w-7 h-7 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+        <div className="bg-white border border-ocp-100 rounded-xl p-8">
+          <div className="w-14 h-14 bg-ocp-50 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg className="w-7 h-7 text-ocp-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
           </div>
-          <h2 className="text-lg font-bold text-slate-900 mb-2">Demande déjà soumise</h2>
-          <p className="text-sm text-slate-500 mb-4">
+          <h2 className="text-lg font-bold text-ocp-800 mb-2">Demande déjà soumise</h2>
+          <p className="text-sm text-ocp-500 mb-4">
             Vous avez déjà une demande de stage avec le statut :{' '}
             {statusBadge(existing.status).badge}
           </p>
@@ -139,8 +139,8 @@ const Application = () => {
       <PageHeader title="Demande de stage" />
 
       <form onSubmit={handleSubmit} encType="multipart/form-data">
-        <div className="bg-white border border-slate-200 rounded-md p-5 mb-4">
-          <h2 className="text-sm font-semibold text-slate-800 mb-4 pb-3 border-b border-slate-200">Informations Personnelles</h2>
+        <div className="page-card">
+          <h2 className="text-sm font-semibold text-ocp-800 mb-4 pb-3 border-b border-ocp-100">Informations Personnelles</h2>
           <div className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -189,17 +189,17 @@ const Application = () => {
                 <button type="button" onClick={() => fileRef.current?.click()} className="btn-secondary btn-sm">
                   Choisir un fichier
                 </button>
-                <span className="text-sm text-slate-400">{photo ? photo.name : 'JPG, JPEG ou PNG (max 2 Mo)'}</span>
+                <span className="text-sm text-ocp-400">{photo ? photo.name : 'JPG, JPEG ou PNG (max 2 Mo)'}</span>
               </div>
               <input ref={fileRef} type="file" accept=".jpg,.jpeg,.png" onChange={handlePhoto} className="hidden" />
-              {preview && <img src={preview} alt="Aperçu" className="mt-2 w-20 h-20 object-cover rounded border border-slate-200" />}
+              {preview && <img src={preview} alt="Aperçu" className="mt-2 w-20 h-20 object-cover rounded border border-ocp-100" />}
               {errors.photo && <p className="error-text">{errors.photo}</p>}
             </div>
           </div>
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-md p-5 mb-4">
-          <h2 className="text-sm font-semibold text-slate-800 mb-4 pb-3 border-b border-slate-200">Informations Académiques</h2>
+        <div className="page-card">
+          <h2 className="text-sm font-semibold text-ocp-800 mb-4 pb-3 border-b border-ocp-100">Informations Académiques</h2>
           <div className="space-y-4">
             <div>
               <label className="label-field">Cycle de formation</label>
@@ -248,14 +248,14 @@ const Application = () => {
           </div>
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-md p-5 mb-4">
-          <h2 className="text-sm font-semibold text-slate-800 mb-4 pb-3 border-b border-slate-200">Informations de Stage</h2>
+        <div className="page-card">
+          <h2 className="text-sm font-semibold text-ocp-800 mb-4 pb-3 border-b border-ocp-100">Informations de Stage</h2>
           <div className="space-y-4">
             <div>
               <label className="label-field">Durée (en mois)</label>
               <input type="number" name="duree" value={form.duree} onChange={handleChange} min="1" max="12" className={fieldClass(errors.duree)} />
               {errors.duree && <p className="error-text">{errors.duree}</p>}
-              <p className="mt-1 text-xs text-slate-400">La durée maximale dépend de votre cycle de formation.</p>
+              <p className="mt-1 text-xs text-ocp-400">La durée maximale dépend de votre cycle de formation.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -272,8 +272,8 @@ const Application = () => {
           </div>
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-md p-5 mb-6">
-          <h2 className="text-sm font-semibold text-slate-800 mb-4 pb-3 border-b border-slate-200">Confirmation</h2>
+        <div className="page-card">
+          <h2 className="text-sm font-semibold text-ocp-800 mb-4 pb-3 border-b border-ocp-100">Confirmation</h2>
           <div className="space-y-3">
             {[
               ['whatsapp_confirmed', 'Je confirme mon adhésion au groupe WhatsApp dédié aux stagiaires.'],
@@ -283,7 +283,7 @@ const Application = () => {
               <div key={name}>
                 <label className="flex items-start gap-3 cursor-pointer">
                   <input type="checkbox" name={name} checked={form[name]} onChange={handleChange} className="mt-0.5" />
-                  <span className="text-sm text-slate-700">{label}</span>
+                  <span className="text-sm text-ocp-700">{label}</span>
                 </label>
                 {errors[name] && <p className="error-text ml-7">{errors[name]}</p>}
               </div>

@@ -64,7 +64,7 @@ const Applications = () => {
       <PageHeader title="Candidatures" />
 
       {loading ? <Loading /> : (
-        <div className="bg-white border border-slate-200 rounded-md overflow-hidden">
+        <div className="page-card">
           <Table>
             <Table.Head>
               <Table.Header>Stagiaire</Table.Header>
@@ -78,10 +78,10 @@ const Applications = () => {
               {applications.length === 0 ? <Table.Empty colSpan={6} message="Aucune candidature" /> : (
                 applications.map((app) => (
                   <Table.Row key={app.id}>
-                    <Table.Cell className="font-medium text-slate-800">{app.user?.nom} {app.user?.prenom}</Table.Cell>
-                    <Table.Cell className="text-slate-500">{app.user?.email}</Table.Cell>
-                    <Table.Cell className="text-slate-500">{app.user?.telephone}</Table.Cell>
-                    <Table.Cell className="text-slate-600">{app.specialite}</Table.Cell>
+                    <Table.Cell className="font-medium text-ocp-800">{app.user?.nom} {app.user?.prenom}</Table.Cell>
+                    <Table.Cell className="text-ocp-500">{app.user?.email}</Table.Cell>
+                    <Table.Cell className="text-ocp-500">{app.user?.telephone}</Table.Cell>
+                    <Table.Cell className="text-ocp-600">{app.specialite}</Table.Cell>
                     <Table.Cell>{statusBadge(app.status).badge}</Table.Cell>
                     <Table.Cell className="text-right">
                       {app.status === 'pending' && (
@@ -105,7 +105,7 @@ const Applications = () => {
         title={action === 'accept' ? "Accepter la candidature" : "Refuser la candidature"}
       >
         <Alert type="error">{message}</Alert>
-        <p className="text-sm text-slate-600 mb-4">
+        <p className="text-sm text-ocp-600 mb-4">
           {action === 'accept'
             ? `Affecter ${selectedApp?.user?.prenom} ${selectedApp?.user?.nom} à un département et un superviseur`
             : `Êtes-vous sûr de vouloir refuser la candidature de ${selectedApp?.user?.prenom} ${selectedApp?.user?.nom} ?`}

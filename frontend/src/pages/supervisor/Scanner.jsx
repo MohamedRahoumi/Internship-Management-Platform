@@ -28,12 +28,12 @@ const Scanner = () => {
     <div className="max-w-lg mx-auto">
       <PageHeader title="Scanner de présence" />
 
-      <div className="bg-white border border-slate-200 rounded-md p-6">
+      <div className="bg-white border border-ocp-100 rounded-xl p-6">
         <div className="flex flex-col items-center mb-6">
-          <div className="w-14 h-14 bg-slate-100 rounded-md flex items-center justify-center text-slate-400 mb-3">
+          <div className="w-14 h-14 bg-ocp-50 rounded-md flex items-center justify-center text-ocp-400 mb-3">
             <IconQrCode />
           </div>
-          <p className="text-sm text-slate-500 text-center">
+          <p className="text-sm text-ocp-500 text-center">
             Saisissez le token QR du stagiaire pour enregistrer sa présence
           </p>
         </div>

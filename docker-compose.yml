@@ -24,9 +24,9 @@ services:
     container_name: postgres-stagaire
     restart: always
     environment:
-      POSTGRES_DB: stagaire
-      POSTGRES_USER: ocpms
-      POSTGRES_PASSWORD: 20032026
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "2004:5432"
     volumes:
@@ -37,14 +37,14 @@ services:
     container_name: pgadmin-stagaire
     restart: always
     environment:
-      PGADMIN_DEFAULT_EMAIL: ocpms@gmail.com
-      PGADMIN_DEFAULT_PASSWORD: 20032026
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
     ports:
       - "5050:80"
     depends_on:
       - postgres
 
-  frontend:
+  frontend: 
     image: node:20
     container_name: frontend-stagaire
     working_dir: /app

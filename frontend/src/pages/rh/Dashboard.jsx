@@ -29,14 +29,14 @@ const Dashboard = () => {
       <PageHeader title="Tableau de bord RH" />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {cards.map((card) => (
-          <div key={card.label} className="bg-white border border-slate-200 rounded-md p-5">
+          <div key={card.label} className="stat-card">
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-9 h-9 bg-slate-100 rounded-md flex items-center justify-center text-slate-500">
+              <div className="icon-box">
                 <card.icon />
               </div>
             </div>
-            <p className="text-2xl font-bold text-slate-900">{card.value}</p>
-            <p className="text-xs text-slate-500 mt-0.5">{card.label}</p>
+            <p className="text-2xl font-bold text-ocp-800">{card.value}</p>
+            <p className="text-xs text-ocp-500 mt-0.5">{card.label}</p>
           </div>
         ))}
       </div>
@@ -45,5 +45,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
-

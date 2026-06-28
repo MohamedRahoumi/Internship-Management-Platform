@@ -46,21 +46,21 @@ const Dashboard = () => {
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
         {cards.map((card) => (
-          <div key={card.label} className="bg-white border border-slate-200 rounded-md p-4">
+          <div key={card.label} className="stat-card">
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-9 h-9 bg-slate-100 rounded-md flex items-center justify-center text-slate-500">
+              <div className="icon-box">
                 <card.icon />
               </div>
             </div>
-            <p className="text-2xl font-bold text-slate-900">{card.value}</p>
-            <p className="text-xs text-slate-500 mt-0.5">{card.label}</p>
+            <p className="text-2xl font-bold text-ocp-800">{card.value}</p>
+            <p className="text-xs text-ocp-500 mt-0.5">{card.label}</p>
           </div>
         ))}
       </div>
 
-      <div className="bg-white border border-slate-200 rounded-md">
-        <div className="px-5 py-4 border-b border-slate-200">
-          <h2 className="text-sm font-semibold text-slate-800">Activité récente</h2>
+      <div className="card">
+        <div className="card-header">
+          <h2 className="text-sm font-semibold text-ocp-800">Activité récente</h2>
         </div>
         {stats?.recent_audit_logs?.length > 0 ? (
           <Table>
@@ -73,20 +73,20 @@ const Dashboard = () => {
             <Table.Body>
               {stats.recent_audit_logs.map((log) => (
                 <Table.Row key={log.id}>
-                  <Table.Cell className="font-medium text-slate-800">{log.user}</Table.Cell>
+                  <Table.Cell className="font-medium text-ocp-800">{log.user}</Table.Cell>
                   <Table.Cell>
                     <Badge color={actionColors[log.action] || 'slate'}>
                       {actionLabels[log.action] || log.action}
                     </Badge>
                   </Table.Cell>
-                  <Table.Cell className="text-slate-500">{log.model_type}</Table.Cell>
-                  <Table.Cell className="text-slate-500 whitespace-nowrap">{log.created_at}</Table.Cell>
+                  <Table.Cell className="text-ocp-500">{log.model_type}</Table.Cell>
+                  <Table.Cell className="text-ocp-500 whitespace-nowrap">{log.created_at}</Table.Cell>
                 </Table.Row>
               ))}
             </Table.Body>
           </Table>
         ) : (
-          <div className="p-12 text-center text-slate-400 text-sm">Aucune activité récente</div>
+          <div className="p-12 text-center text-ocp-400 text-sm">Aucune activité récente</div>
         )}
       </div>
     </div>
@@ -94,5 +94,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
-

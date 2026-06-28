@@ -1,9 +1,10 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import useAuthStore from './store/authStore';
 import Layout from './components/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
+import Welcome from './pages/auth/Welcome';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
+
 import AdminDashboard from './pages/admin/Dashboard';
 import AdminUsers from './pages/admin/Users';
 import AdminDepartments from './pages/admin/Departments';
@@ -23,26 +24,12 @@ import InternAttendance from './pages/intern/AttendanceHistory';
 import InternEvaluation from './pages/intern/MyEvaluation';
 import InternCertificate from './pages/intern/MyCertificate';
 
-const roleHome = {
-  administrator: '/admin/dashboard',
-  rh: '/rh/dashboard',
-  supervisor: '/supervisor/dashboard',
-  intern: '/intern/dashboard',
-};
-
-const HomeRedirect = () => {
-  const user = useAuthStore((s) => s.user);
-  const token = useAuthStore((s) => s.token);
-  if (!token) return <Navigate to="/login" replace />;
-  return <Navigate to={roleHome[user?.role] || '/login'} replace />;
-};
-
 const App = () => (
   <BrowserRouter>
     <Routes>
+      <Route path="/" element={<Welcome />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/" element={<HomeRedirect />} />
 
       <Route path="/admin" element={<ProtectedRoute roles={['administrator']}><Layout /></ProtectedRoute>}>
         <Route index element={<Navigate to="dashboard" replace />} />

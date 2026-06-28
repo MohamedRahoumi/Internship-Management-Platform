@@ -2,7 +2,7 @@ import { IconSearch } from './Icons';
 
 const SearchInput = ({ value, onChange, placeholder = 'Rechercher...', className = '' }) => (
   <div className={`relative ${className}`}>
-    <IconSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+    <IconSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-ocp-400" />
     <input
       type="text"
       value={value}
