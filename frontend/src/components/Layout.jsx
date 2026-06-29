@@ -156,9 +156,13 @@ const Layout = () => {
               to={`/${user?.role === 'administrator' ? 'admin' : user?.role}/profile`}
               className="flex items-center gap-3 hover:opacity-80 transition-opacity"
             >
-              <div className="w-9 h-9 rounded-full bg-ocp-500 text-white flex items-center justify-center text-xs font-bold shadow-sm">
-                {initials}
-              </div>
+              {user?.photo ? (
+                <img src={user.photo} alt="" className="w-9 h-9 rounded-full object-cover shadow-sm" />
+              ) : (
+                <div className="w-9 h-9 rounded-full bg-ocp-500 text-white flex items-center justify-center text-xs font-bold shadow-sm">
+                  {initials}
+                </div>
+              )}
               <div className="hidden sm:block">
                 <div className="text-sm font-semibold text-ocp-700 leading-tight">{fullName}</div>
                 <div className="text-[0.7rem] text-gray-500">{user?.email}</div>
