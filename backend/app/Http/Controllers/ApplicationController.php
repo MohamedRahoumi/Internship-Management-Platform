@@ -20,7 +20,7 @@ class ApplicationController extends Controller
     {
         $this->authorize('viewAny', \App\Models\InternshipApplication::class);
 
-        $applications = $this->applicationService->all($request->only(['status', 'department_id']));
+        $applications = $this->applicationService->all($request->only(['status', 'department_id', 'search']));
 
         return response()->json(ApplicationResource::collection($applications));
     }
@@ -29,7 +29,11 @@ class ApplicationController extends Controller
     {
         $this->authorize('create', \App\Models\InternshipApplication::class);
 
-        $application = $this->applicationService->create($request->user(), $request->validated());
+        try {
+            $application = $this->applicationService->create($request->user(), $request->validated());
+        } catch (\RuntimeException $e) {
+            return response()->json(['message' => $e->getMessage()], 409);
+        }
 
         return response()->json(new ApplicationResource($application), 201);
     }
@@ -49,9 +53,13 @@ class ApplicationController extends Controller
 
     public function myApplications(Request $request): JsonResponse
     {
-        $applications = $this->applicationService->findByUser($request->user()->id);
+        $user = $request->user();
+        $applications = $this->applicationService->findByUser($user->id);
 
-        return response()->json(ApplicationResource::collection($applications));
+        return response()->json([
+            'data' => ApplicationResource::collection($applications),
+            'can_apply' => !$user->hasActiveInternship(),
+        ]);
     }
 
     public function approve(int $id, ApproveApplicationRequest $request): JsonResponse

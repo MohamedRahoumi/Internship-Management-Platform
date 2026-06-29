@@ -5,11 +5,13 @@ namespace App\Services;
 use App\DTOs\ApplicationDTO;
 use App\Enums\ApplicationStatus;
 use App\Enums\InternStatus;
+use App\Mail\OffreStageMail;
 use App\Models\InternshipApplication;
 use App\Models\User;
 use App\Repositories\Interfaces\ApplicationRepositoryInterface;
 use App\Repositories\Interfaces\InternRepositoryInterface;
 use App\Repositories\Interfaces\UserRepositoryInterface;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class ApplicationService
@@ -18,11 +20,18 @@ class ApplicationService
         private readonly ApplicationRepositoryInterface $applicationRepository,
         private readonly InternRepositoryInterface $internRepository,
         private readonly UserRepositoryInterface $userRepository,
+        private readonly OffreStageService $offreStageService,
         private readonly AuditService $auditService,
     ) {}
 
     public function create(User $user, array $data): InternshipApplication
     {
+        if ($user->hasActiveInternship()) {
+            throw new \RuntimeException(
+                'Vous avez déjà un stage en cours. Vous ne pouvez pas déposer une nouvelle candidature tant que votre stage actuel n\'est pas terminé.'
+            );
+        }
+
         $this->userRepository->update($user, [
             'cin' => $data['cin'] ?? $user->cin,
             'civility' => $data['civility'] ?? $user->civility,
@@ -82,7 +91,7 @@ class ApplicationService
 
         $qrToken = Str::random(64);
 
-        $this->internRepository->create([
+        $intern = $this->internRepository->create([
             'user_id' => $user->id,
             'supervisor_id' => $data['supervisor_id'],
             'department_id' => $data['department_id'],
@@ -92,6 +101,13 @@ class ApplicationService
             'date_fin' => $application->date_fin,
             'status' => InternStatus::Active->value,
         ]);
+
+        try {
+            $offre = $this->offreStageService->generate($intern, auth()->user());
+            Mail::to($user->email)->send(new OffreStageMail($offre));
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Erreur génération offre de stage: ' . $e->getMessage());
+        }
 
         $this->applicationRepository->update($application, [
             'status' => ApplicationStatus::Active->value,

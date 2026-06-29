@@ -40,12 +40,24 @@ class DashboardService
     public function rhDashboard(): array
     {
         return [
+            'total_applications' => InternshipApplication::count(),
             'pending_applications' => InternshipApplication::where('status', ApplicationStatus::Pending->value)->count(),
-            'approved_applications' => InternshipApplication::where('status', ApplicationStatus::Approved->value)->count(),
+            'approved_applications' => InternshipApplication::whereIn('status', [ApplicationStatus::Approved->value, ApplicationStatus::Active->value])->count(),
             'rejected_applications' => InternshipApplication::where('status', ApplicationStatus::Rejected->value)->count(),
             'active_interns' => Intern::where('status', 'active')->count(),
             'total_attendances' => Attendance::count(),
             'today_attendances' => Attendance::whereDate('created_at', today())->count(),
+            'recent_applications' => InternshipApplication::with('user')
+                ->latest()
+                ->take(10)
+                ->get()
+                ->map(fn ($app) => [
+                    'id' => $app->id,
+                    'user' => $app->user ? "{$app->user->prenom} {$app->user->nom}" : 'Inconnu',
+                    'email' => $app->user?->email ?? '—',
+                    'status' => $app->status->value,
+                    'created_at' => $app->created_at->diffForHumans(),
+                ]),
         ];
     }
 
@@ -65,23 +77,56 @@ class DashboardService
 
     public function internDashboard(int $userId): array
     {
+        $user = User::find($userId);
         $intern = Intern::where('user_id', $userId)->first();
+        $application = InternshipApplication::where('user_id', $userId)->first();
 
-        if (!$intern) {
+        $hasActiveInternship = $user?->hasActiveInternship() ?? false;
+
+        if ($intern) {
             return [
-                'has_application' => false,
-                'status' => null,
+                'has_application' => true,
+                'application_status' => $application?->status?->value ?? 'active',
+                'status' => $intern->status,
+                'attendances_count' => $intern->attendances()->count(),
+                'has_report' => $intern->report !== null,
+                'has_evaluation' => $intern->evaluation !== null,
+                'has_certificate' => $intern->certificate !== null,
+                'has_offre' => $intern->offreStage !== null,
+                'intern' => $intern->load('user', 'department', 'supervisor', 'attendances', 'report', 'evaluation', 'certificate', 'offreStage'),
+                'rejection_reason' => null,
+                'has_active_internship' => $hasActiveInternship,
+            ];
+        }
+
+        if ($application) {
+            return [
+                'has_application' => true,
+                'application_status' => $application->status->value,
+                'status' => $application->status->value,
+                'attendances_count' => 0,
+                'has_report' => false,
+                'has_evaluation' => false,
+                'has_certificate' => false,
+                'has_offre' => false,
+                'intern' => null,
+                'rejection_reason' => $application->status === ApplicationStatus::Rejected ? $application->motif_refus : null,
+                'has_active_internship' => $hasActiveInternship,
             ];
         }
 
         return [
-            'has_application' => true,
-            'status' => $intern->status,
-            'attendances_count' => $intern->attendances()->count(),
-            'has_report' => $intern->report !== null,
-            'has_evaluation' => $intern->evaluation !== null,
-            'has_certificate' => $intern->certificate !== null,
-            'intern' => $intern->load('user', 'department', 'supervisor', 'attendances', 'report', 'evaluation', 'certificate'),
+            'has_application' => false,
+            'application_status' => null,
+            'status' => null,
+            'attendances_count' => 0,
+            'has_report' => false,
+            'has_evaluation' => false,
+            'has_certificate' => false,
+            'has_offre' => false,
+            'intern' => null,
+            'rejection_reason' => null,
+            'has_active_internship' => false,
         ];
     }
 }

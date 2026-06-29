@@ -14,13 +14,9 @@ class StoreEvaluationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'competences_techniques' => ['required', 'integer', 'min:0', 'max:100'],
-            'communication' => ['required', 'integer', 'min:0', 'max:100'],
-            'discipline' => ['required', 'integer', 'min:0', 'max:100'],
-            'autonomie' => ['required', 'integer', 'min:0', 'max:100'],
-            'travail_equipe' => ['required', 'integer', 'min:0', 'max:100'],
-            'qualite_rapport' => ['required', 'integer', 'min:0', 'max:100'],
-            'commentaire_general' => ['nullable', 'string', 'max:2000'],
+            'scores' => ['required', 'array'],
+            'scores.*' => ['required', 'integer', 'min:1', 'max:5'],
+            'observations' => ['nullable', 'string', 'max:2000'],
             'recommandation' => ['nullable', 'string', 'max:255'],
         ];
     }

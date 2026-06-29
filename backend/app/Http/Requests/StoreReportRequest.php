@@ -14,8 +14,8 @@ class StoreReportRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'titre' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string', 'max:5000'],
+            'titre' => ['nullable', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'max:5000'],
             'file' => ['required', 'file', 'mimes:pdf', 'max:10240'],
         ];
     }

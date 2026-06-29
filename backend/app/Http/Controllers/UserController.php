@@ -33,7 +33,11 @@ class UserController extends Controller
 
         $user = $this->userRepository->create($data);
 
-        Mail::to($user->email)->send(new NewUserAccount($user, $plainPassword));
+        try {
+            Mail::to($user->email)->send(new NewUserAccount($user, $plainPassword));
+        } catch (\Throwable $e) {
+            // Email non bloquant
+        }
 
         return response()->json(new UserResource($user), 201);
     }
@@ -65,7 +69,14 @@ class UserController extends Controller
             'department_id' => ['nullable', 'exists:departments,id'],
             'telephone' => ['nullable', 'string', 'max:20'],
             'is_active' => ['sometimes', 'boolean'],
+            'password' => ['nullable', 'string', 'min:8'],
         ]);
+
+        if (!empty($data['password'])) {
+            $data['password'] = bcrypt($data['password']);
+        } else {
+            unset($data['password']);
+        }
 
         $user = $this->userRepository->update($user, $data);
 

@@ -9,7 +9,7 @@ class InternRepository implements InternRepositoryInterface
 {
     public function all(array $filters = [])
     {
-        $query = Intern::with('user', 'department', 'supervisor');
+        $query = Intern::with('user', 'department', 'supervisor', 'evaluation', 'certificate');
         if (!empty($filters['department_id'])) {
             $query->where('department_id', $filters['department_id']);
         }
@@ -18,6 +18,14 @@ class InternRepository implements InternRepositoryInterface
         }
         if (!empty($filters['supervisor_id'])) {
             $query->where('supervisor_id', $filters['supervisor_id']);
+        }
+        if (!empty($filters['search'])) {
+            $search = $filters['search'];
+            $query->whereHas('user', function ($q) use ($search) {
+                $q->where('nom', 'like', "%{$search}%")
+                  ->orWhere('prenom', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
+            });
         }
         return $query->latest()->get();
     }
@@ -44,7 +52,7 @@ class InternRepository implements InternRepositoryInterface
     public function findBySupervisor(int $supervisorId)
     {
         return Intern::where('supervisor_id', $supervisorId)
-            ->with('user', 'department')
+            ->with('user', 'department', 'evaluation', 'certificate')
             ->latest()
             ->get();
     }
@@ -67,7 +75,7 @@ class InternRepository implements InternRepositoryInterface
 
     public function paginate(array $filters = [], int $perPage = 15)
     {
-        $query = Intern::with('user', 'department', 'supervisor');
+        $query = Intern::with('user', 'department', 'supervisor', 'evaluation', 'certificate');
         if (!empty($filters['department_id'])) {
             $query->where('department_id', $filters['department_id']);
         }
@@ -76,6 +84,14 @@ class InternRepository implements InternRepositoryInterface
         }
         if (!empty($filters['supervisor_id'])) {
             $query->where('supervisor_id', $filters['supervisor_id']);
+        }
+        if (!empty($filters['search'])) {
+            $search = $filters['search'];
+            $query->whereHas('user', function ($q) use ($search) {
+                $q->where('nom', 'like', "%{$search}%")
+                  ->orWhere('prenom', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
+            });
         }
         return $query->latest()->paginate($perPage);
     }

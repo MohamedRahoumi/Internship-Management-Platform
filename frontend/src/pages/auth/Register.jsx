@@ -86,7 +86,7 @@ const Register = () => {
           playsInline
           crossOrigin="anonymous"
           className="w-full h-full object-cover"
-          src="https://plugin-assets.open-design.ai/plugins/evergreen-finance/hf_20260517_070729_32a7eb4e-d6e2-4571-badc-91b4dab1ecbe-2db9b1.mp4"
+          src="/back.mp4"
         />
       </div>
       <div className="absolute inset-0 bg-gradient-to-b from-white/92 via-white/75 to-ocp-50/90 z-10" />

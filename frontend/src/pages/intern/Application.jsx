@@ -19,6 +19,7 @@ const fieldClass = (err) => `input-field ${err ? 'input-error' : ''}`;
 
 const Application = () => {
   const [existing, setExisting] = useState(null);
+  const [canApply, setCanApply] = useState(true);
   const [loading, setLoading] = useState(true);
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({
@@ -36,7 +37,11 @@ const Application = () => {
 
   useEffect(() => {
     api.get('/my-applications')
-      .then((res) => { const apps = res.data.data || res.data.applications || []; if (apps.length > 0) setExisting(apps[0]); })
+      .then((res) => {
+        const apps = res.data.data || res.data.applications || [];
+        if (apps.length > 0) setExisting(apps[0]);
+        if (res.data.can_apply !== undefined) setCanApply(res.data.can_apply);
+      })
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
@@ -92,9 +97,13 @@ const Application = () => {
       await api.post('/applications', fd, { headers: { 'Content-Type': 'multipart/form-data' } });
       setSubmitted(true);
     } catch (err) {
-      const serverErrors = err.response?.data?.errors;
-      if (serverErrors) { const mapped = {}; Object.entries(serverErrors).forEach(([key, msgs]) => { mapped[key] = msgs[0]; }); setErrors(mapped); }
-      setServerError("Erreur lors de l'envoi de la candidature");
+      if (err.response?.status === 409) {
+        setServerError(err.response.data?.message || "Vous avez déjà un stage en cours.");
+      } else {
+        const serverErrors = err.response?.data?.errors;
+        if (serverErrors) { const mapped = {}; Object.entries(serverErrors).forEach(([key, msgs]) => { mapped[key] = msgs[0]; }); setErrors(mapped); }
+        setServerError("Erreur lors de l'envoi de la candidature");
+      }
     }
   };
 
@@ -109,6 +118,22 @@ const Application = () => {
           </div>
           <h2 className="text-lg font-bold text-ocp-800 mb-2">Candidature soumise !</h2>
           <p className="text-sm text-ocp-500">Votre demande de stage a été envoyée avec succès. Vous recevrez une réponse sous peu.</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!canApply && !existing) {
+    return (
+      <div className="max-w-lg mx-auto text-center py-16">
+        <div className="bg-white border border-ocp-100 rounded-xl p-8">
+          <div className="w-14 h-14 bg-amber-50 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg className="w-7 h-7 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" /></svg>
+          </div>
+          <h2 className="text-lg font-bold text-ocp-800 mb-2">Stage déjà en cours</h2>
+          <p className="text-sm text-ocp-500">
+            Vous avez déjà un stage en cours. Vous ne pouvez pas déposer une nouvelle candidature tant que votre stage actuel n'est pas terminé.
+          </p>
         </div>
       </div>
     );

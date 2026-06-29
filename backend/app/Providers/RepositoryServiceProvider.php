@@ -8,6 +8,7 @@ use App\Repositories\Eloquent\CertificateRepository;
 use App\Repositories\Eloquent\DepartmentRepository;
 use App\Repositories\Eloquent\EvaluationRepository;
 use App\Repositories\Eloquent\InternRepository;
+use App\Repositories\Eloquent\OffreStageRepository;
 use App\Repositories\Eloquent\ReportRepository;
 use App\Repositories\Eloquent\UserRepository;
 use App\Repositories\Interfaces\ApplicationRepositoryInterface;
@@ -16,6 +17,7 @@ use App\Repositories\Interfaces\CertificateRepositoryInterface;
 use App\Repositories\Interfaces\DepartmentRepositoryInterface;
 use App\Repositories\Interfaces\EvaluationRepositoryInterface;
 use App\Repositories\Interfaces\InternRepositoryInterface;
+use App\Repositories\Interfaces\OffreStageRepositoryInterface;
 use App\Repositories\Interfaces\ReportRepositoryInterface;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
@@ -32,6 +34,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(ReportRepositoryInterface::class, ReportRepository::class);
         $this->app->bind(EvaluationRepositoryInterface::class, EvaluationRepository::class);
         $this->app->bind(CertificateRepositoryInterface::class, CertificateRepository::class);
+        $this->app->bind(OffreStageRepositoryInterface::class, OffreStageRepository::class);
     }
 
     public function boot(): void

@@ -10,16 +10,18 @@ class Evaluation extends Model
     protected $fillable = [
         'intern_id',
         'evaluator_id',
-        'competences_techniques',
-        'communication',
-        'discipline',
-        'autonomie',
-        'travail_equipe',
-        'qualite_rapport',
+        'scores',
         'note_finale',
-        'commentaire_general',
+        'observations',
         'recommandation',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'scores' => 'array',
+        ];
+    }
 
     public function intern(): BelongsTo
     {

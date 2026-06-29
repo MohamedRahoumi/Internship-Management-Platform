@@ -654,8 +654,8 @@ const Welcome = () => {
 
       <section className="hero">
         <div className="boomerang-wrap">
-          <video id="bm-video" muted playsInline crossOrigin="anonymous"
-            src="https://plugin-assets.open-design.ai/plugins/evergreen-finance/hf_20260517_070729_32a7eb4e-d6e2-4571-badc-91b4dab1ecbe-2db9b1.mp4" />
+          <video id="bm-video" autoPlay muted playsInline preload="auto"
+            src="./back.mp4" />
           <canvas id="bm-canvas" />
         </div>
         <div className="hero-overlay" />
@@ -671,7 +671,7 @@ const Welcome = () => {
               <a href="#process">Processus</a>
               <a href="#testimonials">Témoignages</a>
             </div>
-            <Link to="/login" className="btn-dark nav-cta">Accéder au Portail</Link>
+            <Link to="/login" className="btn-dark nav-cta">Espace Stagiaire</Link>
             <button className="hamburger" id="hamburger" aria-label="Menu"
               onClick={() => document.getElementById('mobile-menu')?.classList.toggle('open')}>
               <svg id="ic-menu" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#02421D" strokeWidth="2" strokeLinecap="round">
@@ -684,7 +684,7 @@ const Welcome = () => {
               <a href="#stats">Statistiques</a>
               <a href="#process">Processus</a>
               <a href="#testimonials">Témoignages</a>
-              <Link to="/login" className="btn-dark" style={{ justifyContent: 'center', width: '100%' }}>Accéder au Portail</Link>
+              <Link to="/login" className="btn-dark" style={{ justifyContent: 'center', width: '100%' }}>Espace Stagiaire</Link>
             </div>
           </nav>
 
@@ -701,10 +701,7 @@ const Welcome = () => {
             </p>
             <div className="hero-ctas fade" data-immediate data-delay="400">
               <Link to="/login" className="btn-ocp">Découvrir nos offres</Link>
-              <button className="btn-light" onClick={() => alert("Démo Plateforme - En cours de chargement.")}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="#1f2937" stroke="#1f2937" strokeWidth="2" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3" /></svg>
-                Démo Plateforme
-              </button>
+
             </div>
           </div>
 
@@ -785,7 +782,7 @@ const Welcome = () => {
           <div className="t-right fade" data-delay="150">
             <div className="t-video-wrap">
               <video autoPlay muted loop playsInline
-                src="https://plugin-assets.open-design.ai/plugins/evergreen-finance/hf_20260517_074029_c7a854bd-2d6e-4b62-96b3-ae8c16311e44-59f9be.mp4" />
+                src="./back.mp4" />
             </div>
           </div>
         </div>
@@ -798,14 +795,11 @@ const Welcome = () => {
               <span className="sec-badge">Fonctionnalités</span>
               <h2 className="f-heading font-cooper-medium fade">Des outils de pointe pour chaque acteur</h2>
             </div>
-            <button className="btn-dark fade" data-delay="100" onClick={() => alert("Visite guidée (1 min)")}>
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="#fff" stroke="#fff" strokeWidth="2" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3" /></svg>
-              Visite guidée (1 min)
-            </button>
+
           </div>
           <div className="cards-grid">
             <div className="feature-card fade" data-delay="50">
-              <img className="bg-img" src="https://plugin-assets.open-design.ai/plugins/evergreen-finance/hf_20260517_061249_f20dfeda-1033-45ce-a3ee-070965599cbf-6c6b7e.webp&w=1280&q=85" alt="Gestion des candidatures" />
+              <img className="bg-img" src="/candidature.jpg" alt="Gestion des candidatures" />
               <div className="overlay" />
               <div className="top-label">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>
@@ -842,7 +836,7 @@ const Welcome = () => {
               </div>
             </div>
             <div className="feature-card fade" data-delay="180">
-              <img className="bg-img" src="https://plugin-assets.open-design.ai/plugins/evergreen-finance/hf_20260517_061305_db631f5f-185f-4fda-a7a8-1dd7359ef2ea-4b7cdd.webp&w=1280&q=85" alt="Validation des stages" />
+              <img className="bg-img" src="/validation.jpg" alt="Validation des stages" />
               <div className="overlay" />
               <div className="top-label">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><path d="M9 12l2 2 4-4" /></svg>
@@ -869,7 +863,7 @@ const Welcome = () => {
               </div>
             </div>
             <div className="feature-card fade" data-delay="300">
-              <img className="bg-img" src="https://plugin-assets.open-design.ai/plugins/evergreen-finance/hf_20260517_061316_50e651f8-02d0-4add-9ddb-7d81d15ac02e-24edde.webp&w=1280&q=85" alt="Génération de documents" />
+              <img className="bg-img" src="/document.jpg" alt="Génération de documents" />
               <div className="overlay" />
               <div className="top-label">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /><polyline points="10 9 9 9 8 9" /></svg>
@@ -1060,10 +1054,7 @@ const Welcome = () => {
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /></svg>
               Espace Stagiaire
             </Link>
-            <Link to="/login" className="btn-cta btn-cta-secondary">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10" /><path d="M8 14s1.5 2 4 2 4-2 4-2" /><line x1="9" y1="9" x2="9.01" y2="9" /><line x1="15" y1="9" x2="15.01" y2="9" /></svg>
-              Portail Encadrant
-            </Link>
+
           </div>
         </div>
       </section>

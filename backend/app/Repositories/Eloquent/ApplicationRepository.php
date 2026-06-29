@@ -16,6 +16,16 @@ class ApplicationRepository implements ApplicationRepositoryInterface
         if (!empty($filters['department_id'])) {
             $query->where('department_id', $filters['department_id']);
         }
+        if (!empty($filters['search'])) {
+            $search = $filters['search'];
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('user', function ($q) use ($search) {
+                    $q->where('nom', 'like', "%{$search}%")
+                      ->orWhere('prenom', 'like', "%{$search}%")
+                      ->orWhere('email', 'like', "%{$search}%");
+                })->orWhere('specialite', 'like', "%{$search}%");
+            });
+        }
         return $query->latest()->get();
     }
 
@@ -64,6 +74,16 @@ class ApplicationRepository implements ApplicationRepositoryInterface
         }
         if (!empty($filters['department_id'])) {
             $query->where('department_id', $filters['department_id']);
+        }
+        if (!empty($filters['search'])) {
+            $search = $filters['search'];
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('user', function ($q) use ($search) {
+                    $q->where('nom', 'like', "%{$search}%")
+                      ->orWhere('prenom', 'like', "%{$search}%")
+                      ->orWhere('email', 'like', "%{$search}%");
+                })->orWhere('specialite', 'like', "%{$search}%");
+            });
         }
         return $query->latest()->paginate($perPage);
     }

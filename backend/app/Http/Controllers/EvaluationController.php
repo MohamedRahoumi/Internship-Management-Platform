@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreEvaluationRequest;
 use App\Http\Resources\EvaluationResource;
 use App\Services\EvaluationService;
+use App\Services\InternService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,23 @@ class EvaluationController extends Controller
 {
     public function __construct(
         private readonly EvaluationService $evaluationService,
+        private readonly InternService $internService,
     ) {}
+
+    public function myEvaluation(Request $request): JsonResponse
+    {
+        $intern = $this->internService->findByUser($request->user()->id);
+        if (!$intern) {
+            return response()->json(['message' => 'Profil stagiaire introuvable.'], 404);
+        }
+
+        $evaluation = $this->evaluationService->findByIntern($intern->id);
+        if (!$evaluation) {
+            return response()->json(['message' => 'Aucune évaluation trouvée.'], 404);
+        }
+
+        return response()->json(new EvaluationResource($evaluation));
+    }
 
     public function store(int $internId, StoreEvaluationRequest $request): JsonResponse
     {

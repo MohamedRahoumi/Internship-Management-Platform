@@ -20,7 +20,7 @@ class InternController extends Controller
         if ($user->isSupervisor()) {
             $interns = $this->internService->findBySupervisor($user->id);
         } else {
-            $interns = $this->internService->all($request->only(['department_id', 'status', 'supervisor_id']));
+            $interns = $this->internService->all($request->only(['department_id', 'status', 'supervisor_id', 'search']));
         }
 
         return response()->json(InternResource::collection($interns));

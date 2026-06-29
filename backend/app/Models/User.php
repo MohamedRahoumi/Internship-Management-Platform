@@ -31,6 +31,7 @@ class User extends Authenticatable
         'password',
         'photo',
         'is_active',
+        'remember_token',
     ];
 
     protected function casts(): array
@@ -100,6 +101,17 @@ class User extends Authenticatable
     public function isIntern(): bool
     {
         return $this->role === UserRole::Intern->value;
+    }
+
+    public function hasActiveInternship(): bool
+    {
+        return $this->internshipApplications()
+            ->whereIn('status', [\App\Enums\ApplicationStatus::Approved->value, \App\Enums\ApplicationStatus::Active->value])
+            ->where('date_fin', '>=', now()->startOfDay())
+            ->exists()
+            || $this->intern()
+                ->where('status', \App\Enums\InternStatus::Active->value)
+                ->exists();
     }
 }
 

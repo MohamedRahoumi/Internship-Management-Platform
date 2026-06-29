@@ -11,6 +11,7 @@ class AttendanceResource extends JsonResource
         return [
             'id' => $this->id,
             'intern_id' => $this->intern_id,
+            'intern' => new InternResource($this->whenLoaded('intern')),
             'scanner' => new UserResource($this->whenLoaded('scanner')),
             'check_in_at' => $this->check_in_at,
             'check_out_at' => $this->check_out_at,

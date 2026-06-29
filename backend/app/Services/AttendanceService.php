@@ -42,17 +42,17 @@ class AttendanceService
                 'status' => AttendanceStatus::CheckedIn->value,
             ]);
             $this->auditService->log('scan', $attendance, null, ['action' => 'check_in', 'intern' => $intern->user->nom]);
-            return $attendance;
+            return $attendance->load('intern.user');
         }
 
         if ($todayAttendance->status === AttendanceStatus::CheckedOut->value) {
             throw new \RuntimeException('Vous avez déjà effectué le check-out aujourd\'hui.');
         }
 
-        return $this->attendanceRepository->update($todayAttendance, [
+        return tap($this->attendanceRepository->update($todayAttendance, [
             'check_out_at' => now(),
             'status' => AttendanceStatus::CheckedOut->value,
-        ]);
+        ]), fn($a) => $a->load('intern.user'));
     }
 
     public function findByIntern(int $internId)

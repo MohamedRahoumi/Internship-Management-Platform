@@ -10,7 +10,7 @@ const AttendanceHistory = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.get('/intern/attendance')
+    api.get('/attendances/my-attendance')
       .then((res) => setAttendance(res.data.attendance || res.data || []))
       .catch(() => {})
       .finally(() => setLoading(false));
@@ -42,10 +42,10 @@ const AttendanceHistory = () => {
                     {entry.date ? new Date(entry.date).toLocaleDateString('fr-FR') : '—'}
                   </Table.Cell>
                   <Table.Cell className="text-ocp-500">
-                    {entry.check_in ? new Date(entry.check_in).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) : '—'}
+                    {entry.check_in_at ? new Date(entry.check_in_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) : '—'}
                   </Table.Cell>
                   <Table.Cell className="text-ocp-500">
-                    {entry.check_out ? new Date(entry.check_out).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) : '—'}
+                    {entry.check_out_at ? new Date(entry.check_out_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) : '—'}
                   </Table.Cell>
                   <Table.Cell>{statusBadge(entry.status).badge}</Table.Cell>
                 </Table.Row>

@@ -18,7 +18,7 @@ class CreateUserRequest extends FormRequest
             'prenom' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['nullable', 'string', 'min:8'],
-            'role' => ['required', 'string', 'in:administrator,rh,supervisor'],
+            'role' => ['required', 'string', 'in:administrator,rh,supervisor,intern'],
             'department_id' => ['nullable', 'exists:departments,id'],
             'telephone' => ['nullable', 'string', 'max:20'],
         ];

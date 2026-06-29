@@ -1,61 +1,57 @@
 import { useState } from 'react';
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
-import {
-  IconDashboard, IconUsers, IconBuilding, IconClipboard, IconFileText,
-  IconGraduate, IconQrCode, IconStar, IconCertificate, IconLogout, IconMenu,
-} from './ui/Icons';
 
 const icons = {
-  dashboard: IconDashboard,
-  users: IconUsers,
-  departments: IconBuilding,
-  audit: IconClipboard,
-  applications: IconFileText,
-  interns: IconGraduate,
-  certificates: IconCertificate,
-  scanner: IconQrCode,
-  evaluations: IconStar,
-  attendance: IconClipboard,
-  report: IconFileText,
-  evaluation: IconStar,
-  certificate: IconCertificate,
+  dashboard: 'fa-tachometer-alt',
+  users: 'fa-users',
+  departments: 'fa-building',
+  audit: 'fa-clipboard-list',
+  applications: 'fa-file-alt',
+  interns: 'fa-graduation-cap',
+  certificates: 'fa-certificate',
+  offres: 'fa-file-contract',
+  scanner: 'fa-qrcode',
+  evaluations: 'fa-star',
+  attendance: 'fa-calendar-check',
+  report: 'fa-file-alt',
+  evaluation: 'fa-star',
+  certificate: 'fa-certificate',
+  profile: 'fa-user',
 };
 
 const roleMenuItems = {
   administrator: [
     { label: 'Tableau de bord', path: '/admin/dashboard', icon: 'dashboard' },
+    { label: 'Mon profil', path: '/admin/profile', icon: 'profile' },
     { label: 'Utilisateurs', path: '/admin/users', icon: 'users' },
     { label: 'Départements', path: '/admin/departments', icon: 'departments' },
     { label: "Journal d'audit", path: '/admin/audit-logs', icon: 'audit' },
   ],
   rh: [
     { label: 'Tableau de bord', path: '/rh/dashboard', icon: 'dashboard' },
+    { label: 'Mon profil', path: '/rh/profile', icon: 'profile' },
     { label: 'Candidatures', path: '/rh/applications', icon: 'applications' },
     { label: 'Stagiaires', path: '/rh/interns', icon: 'interns' },
     { label: 'Attestations', path: '/rh/certificates', icon: 'certificates' },
   ],
   supervisor: [
     { label: 'Tableau de bord', path: '/supervisor/dashboard', icon: 'dashboard' },
+    { label: 'Mon profil', path: '/supervisor/profile', icon: 'profile' },
     { label: 'Mes stagiaires', path: '/supervisor/interns', icon: 'interns' },
     { label: 'Scanner', path: '/supervisor/scanner', icon: 'scanner' },
     { label: 'Évaluations', path: '/supervisor/evaluations', icon: 'evaluations' },
   ],
   intern: [
     { label: 'Tableau de bord', path: '/intern/dashboard', icon: 'dashboard' },
+    { label: 'Mon profil', path: '/intern/profile', icon: 'profile' },
     { label: 'Ma candidature', path: '/intern/application', icon: 'applications' },
     { label: 'Mes présences', path: '/intern/attendance', icon: 'attendance' },
     { label: 'Mon rapport', path: '/intern/report', icon: 'report' },
     { label: 'Mon évaluation', path: '/intern/evaluation', icon: 'evaluation' },
+    { label: 'Mon offre de stage', path: '/intern/offre-stage', icon: 'offres' },
     { label: 'Mon attestation', path: '/intern/certificate', icon: 'certificate' },
   ],
-};
-
-const roleLabels = {
-  administrator: 'Administrateur',
-  rh: 'RH',
-  supervisor: 'Superviseur',
-  intern: 'Stagiaire',
 };
 
 const Layout = () => {
@@ -73,95 +69,122 @@ const Layout = () => {
   };
 
   const NavLink = ({ item }) => {
-    const Icon = icons[item.icon];
     const active = location.pathname === item.path;
     return (
       <Link
         to={item.path}
         onClick={() => setSidebarOpen(false)}
-        className={`flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-xl transition-all duration-200 ${
+        className={`flex items-center gap-3.5 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 mb-0.5 ${
           active
-            ? 'bg-ocp-500 text-white shadow-sm'
-            : 'text-ocp-100 hover:bg-ocp-600 hover:text-white'
+            ? 'bg-ocp-500 text-white shadow-[0_4px_12px_rgba(0,132,61,0.25)]'
+            : 'text-gray-500 hover:bg-ocp-100 hover:text-ocp-700'
         }`}
       >
-        {Icon && <Icon className="shrink-0" />}
+        <i className={`fas ${icons[item.icon]} w-5 text-center text-sm transition-all ${active ? 'text-white' : ''}`} />
         {item.label}
       </Link>
     );
   };
 
+  const initials = user ? `${user.prenom?.[0] || ''}${user.nom?.[0] || ''}`.toUpperCase() : '?';
+  const fullName = user ? `${user.prenom} ${user.nom}` : '';
+
   return (
     <div className="min-h-screen bg-ocp-50">
+      {/* Overlay mobile */}
       {sidebarOpen && (
-        <div className="fixed inset-0 z-30 bg-black/50 lg:hidden" onClick={() => setSidebarOpen(false)} />
+        <div className="fixed inset-0 z-30 bg-black/25 lg:hidden" onClick={() => setSidebarOpen(false)} />
       )}
 
-      <aside className={`fixed inset-y-0 left-0 z-40 w-64 bg-ocp-800 transform transition-transform duration-200 lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-        <div className="flex items-center h-14 px-5 border-b border-ocp-600">
-          <Link to="/" className="flex items-center gap-2.5">
-            <img src="/ocp.svg" alt="OCP Group" className="h-7 w-auto" />
-            <span className="text-white text-sm font-semibold tracking-tight">Gestion Stagiaires</span>
-          </Link>
+      {/* Sidebar */}
+      <aside
+        className={`fixed top-0 left-0 z-40 w-[260px] h-full bg-white border-r border-gray-200 transform transition-transform duration-300 lg:translate-x-0 flex flex-col ${
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
+        {/* Brand */}
+        <div className="flex items-center justify-center px-6 py-5 border-b border-gray-200">
+          <img src="/ocp.svg" alt="OCP" className="h-12 w-auto rounded-lg" />
         </div>
 
-        <div className="px-3 py-2 border-b border-ocp-600">
-          <p className="text-xs text-ocp-100/60">Connecté en tant que</p>
-          <p className="text-sm font-medium text-white truncate mt-0.5">
-            {user?.nom} {user?.prenom}
-          </p>
-          <span className="inline-block mt-1 px-2 py-0.5 text-xs font-medium rounded-lg bg-ocp-600 text-ocp-100">
-            {roleLabels[user?.role] || user?.role}
-          </span>
-        </div>
-
-        <nav className="mt-2 px-3 space-y-0.5 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 200px)' }}>
+        {/* Nav */}
+        <nav className="flex-1 px-3 py-4 overflow-y-auto">
+          <div className="text-[0.7rem] uppercase tracking-wider text-gray-400 font-semibold px-3 pb-2">Navigation</div>
           {menuItems.map((item) => (
             <NavLink key={item.path} item={item} />
           ))}
         </nav>
 
-        <div className="absolute bottom-0 left-0 right-0 p-3 border-t border-ocp-600 bg-ocp-800">
+        {/* Logout */}
+        <div className="px-3 py-4 border-t border-gray-200">
           <button
             onClick={handleLogout}
-            className="flex items-center gap-3 w-full px-4 py-2.5 text-sm font-medium text-ocp-100 hover:text-white hover:bg-ocp-600 rounded-xl transition-all duration-200"
+            className="flex items-center gap-3.5 w-full px-4 py-2.5 rounded-xl text-sm font-medium text-gray-500 hover:bg-red-50 hover:text-red-700 transition-all duration-200"
           >
-            <IconLogout />
+            <i className="fas fa-sign-out-alt w-5 text-center" />
             Déconnexion
           </button>
         </div>
       </aside>
 
-      <div className="lg:pl-64">
-        <header className="sticky top-0 z-20 bg-white border-b border-ocp-100 shadow-sm">
-          <div className="flex items-center justify-between h-14 px-4 lg:px-6">
+      {/* Main */}
+      <div className="lg:ml-[260px] min-h-screen flex flex-col transition-margin duration-300">
+        {/* Top Header */}
+        <header className="sticky top-0 z-20 bg-white/85 backdrop-blur-md border-b border-gray-200 px-4 sm:px-6 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-4">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="lg:hidden text-ocp-500 hover:text-ocp-600 -ml-1 p-1"
+              className="lg:hidden text-ocp-700 p-1.5 rounded-lg hover:bg-ocp-100 transition-colors"
             >
-              <IconMenu />
+              <i className="fas fa-bars text-lg" />
             </button>
-
-            <div className="hidden lg:block" />
-
-            <div className="flex items-center gap-4">
-              <div className="text-right hidden sm:block">
-                <p className="text-sm font-medium text-ocp-800">{user?.nom} {user?.prenom}</p>
-                <p className="text-xs text-ocp-500">{user?.email}</p>
-              </div>
-              <button
-                onClick={handleLogout}
-                className="text-sm font-medium text-ocp-500 hover:text-red-700 px-3 py-1.5 rounded-xl hover:bg-red-50 transition-colors"
-              >
-                Déconnexion
-              </button>
+            <div className="hidden sm:flex items-center gap-2 bg-ocp-50 px-3.5 py-1.5 rounded-full border border-transparent focus-within:border-ocp-500 focus-within:bg-white transition-all">
+              <i className="fas fa-search text-gray-400 text-sm" />
+              <input
+                type="text"
+                placeholder="Rechercher..."
+                className="border-none bg-transparent outline-none text-sm py-1 w-44 placeholder:text-gray-400 text-ocp-700"
+              />
             </div>
+          </div>
+          <div className="flex items-center gap-4">
+            <button className="relative text-gray-500 hover:text-ocp-700 p-2 rounded-lg hover:bg-ocp-100 transition-all">
+              <i className="fas fa-bell text-lg" />
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white" />
+            </button>
+            <Link
+              to={`/${user?.role === 'administrator' ? 'admin' : user?.role}/profile`}
+              className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+            >
+              <div className="w-9 h-9 rounded-full bg-ocp-500 text-white flex items-center justify-center text-xs font-bold shadow-sm">
+                {initials}
+              </div>
+              <div className="hidden sm:block">
+                <div className="text-sm font-semibold text-ocp-700 leading-tight">{fullName}</div>
+                <div className="text-[0.7rem] text-gray-500">{user?.email}</div>
+              </div>
+            </Link>
+            <button
+              onClick={handleLogout}
+              className="text-gray-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-lg text-sm font-medium transition-all hidden sm:block"
+            >
+              <i className="fas fa-sign-out-alt" />
+            </button>
           </div>
         </header>
 
-        <main className="p-4 lg:p-6">
+        {/* Content */}
+        <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 py-7 lg:py-8">
           <Outlet />
         </main>
+
+        {/* Footer */}
+        <footer className="bg-white border-t border-gray-200 py-5 px-6 text-center text-xs text-gray-500">
+          &copy; 2026 OCP Group — Portail des Stages
+          <a href="#" className="text-gray-500 hover:text-ocp-500 ml-3 mr-2 transition-colors">Mentions légales</a>
+          <a href="#" className="text-gray-500 hover:text-ocp-500 mr-2 transition-colors">Confidentialité</a>
+          <a href="#" className="text-gray-500 hover:text-ocp-500 transition-colors">Support</a>
+        </footer>
       </div>
     </div>
   );

@@ -36,6 +36,7 @@ class InternshipApplication extends Model
             'whatsapp_confirmed' => 'boolean',
             'dossier_envoye' => 'boolean',
             'conditions_acceptees' => 'boolean',
+            'status' => \App\Enums\ApplicationStatus::class,
         ];
     }
 

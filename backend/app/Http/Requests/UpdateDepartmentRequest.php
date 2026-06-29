@@ -17,6 +17,7 @@ class UpdateDepartmentRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255', "unique:departments,name,{$id}"],
             'description' => ['nullable', 'string', 'max:1000'],
+            'localisation' => ['nullable', 'string', 'max:500'],
         ];
     }
 }

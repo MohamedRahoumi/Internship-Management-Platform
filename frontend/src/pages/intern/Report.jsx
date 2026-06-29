@@ -28,7 +28,7 @@ const Report = () => {
     setMessage('');
     try {
       const formData = new FormData();
-      formData.append('report', file);
+      formData.append('file', file);
       await api.post('/reports', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
       setMessage('Rapport uploadé avec succès.');
       setMessageType('success');

@@ -11,10 +11,18 @@ use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\InternController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ExportController;
+use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\OffreStageController;
+use App\Http\Controllers\QrCodeController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink']);
+Route::post('/reset-password', [ForgotPasswordController::class, 'reset']);
+
+
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -30,6 +38,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/interns', [InternController::class, 'index']);
     Route::get('/interns/{id}', [InternController::class, 'show']);
 
+    Route::get('/attendances/my-attendance', [AttendanceController::class, 'myAttendance']);
     Route::post('/attendance/scan', [AttendanceController::class, 'scan']);
     Route::get('/attendances', [AttendanceController::class, 'index']);
     Route::get('/attendances/intern/{internId}', [AttendanceController::class, 'internHistory']);
@@ -39,6 +48,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/reports/{id}', [ReportController::class, 'show']);
     Route::get('/reports/intern/{internId}', [ReportController::class, 'internReport']);
 
+    Route::get('/evaluations/my-evaluation', [EvaluationController::class, 'myEvaluation']);
     Route::get('/evaluations', [EvaluationController::class, 'index']);
     Route::post('/evaluations/intern/{internId}', [EvaluationController::class, 'store']);
     Route::get('/evaluations/{id}', [EvaluationController::class, 'show']);
@@ -65,6 +75,20 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/dashboard/intern', [DashboardController::class, 'intern']);
 
     Route::get('/audit-logs', [AuditLogController::class, 'index']);
+
+    Route::get('/offres-stage/mine', [OffreStageController::class, 'myOffre']);
+    Route::get('/offres-stage/mine/download', [OffreStageController::class, 'downloadByIntern']);
+
+    Route::get('/qrcode', [QrCodeController::class, 'show']);
+
+    // Export CSV
+    Route::prefix('export')->group(function () {
+        Route::get('/users', [ExportController::class, 'users']);
+        Route::get('/interns', [ExportController::class, 'interns']);
+        Route::get('/interns/excel', [ExportController::class, 'internsExcel']);
+        Route::get('/audit-logs', [ExportController::class, 'auditLogs']);
+        Route::get('/applications', [ExportController::class, 'applications']);
+    });
 });
 
 

@@ -68,6 +68,11 @@ class Intern extends Model
     {
         return $this->hasOne(Certificate::class);
     }
+
+    public function offreStage(): HasOne
+    {
+        return $this->hasOne(OffreStage::class);
+    }
 }
 
 
