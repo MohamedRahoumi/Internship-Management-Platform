@@ -70,7 +70,13 @@ class UserController extends Controller
             'telephone' => ['nullable', 'string', 'max:20'],
             'is_active' => ['sometimes', 'boolean'],
             'password' => ['nullable', 'string', 'min:8'],
+            'photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
         ]);
+
+        if ($request->hasFile('photo')) {
+            $path = $request->file('photo')->store('photos', 'public');
+            $data['photo'] = $path;
+        }
 
         if (!empty($data['password'])) {
             $data['password'] = bcrypt($data['password']);

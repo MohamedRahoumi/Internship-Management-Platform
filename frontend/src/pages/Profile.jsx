@@ -29,9 +29,20 @@ const Profile = () => {
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState(null);
+  const [photoFile, setPhotoFile] = useState(null);
+  const [photoPreview, setPhotoPreview] = useState(null);
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handlePhotoChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setPhotoFile(file);
+    const reader = new FileReader();
+    reader.onload = (ev) => setPhotoPreview(ev.target.result);
+    reader.readAsDataURL(file);
   };
 
   const handleSubmit = async (e) => {
@@ -40,21 +51,26 @@ const Profile = () => {
     setAlert(null);
 
     try {
-      const payload = { ...form };
+      const fd = new FormData();
+      fd.append('_method', 'PUT');
+      Object.entries(form).forEach(([k, v]) => fd.append(k, v));
       if (password && password.length >= 8) {
         if (password !== passwordConfirm) {
           setAlert({ type: 'error', message: 'Les mots de passe ne correspondent pas.' });
           setLoading(false);
           return;
         }
-        payload.password = password;
+        fd.append('password', password);
       }
+      if (photoFile) fd.append('photo', photoFile);
 
-      await api.put(`/users/${user.id}`, payload);
+      const res = await api.post(`/users/${user.id}`, fd);
       await fetchUser();
       setAlert({ type: 'success', message: 'Profil mis à jour avec succès.' });
       setPassword('');
       setPasswordConfirm('');
+      setPhotoFile(null);
+      setPhotoPreview(null);
     } catch (err) {
       setAlert({
         type: 'error',
@@ -85,8 +101,20 @@ const Profile = () => {
         {/* Avatar Card */}
         <div className="lg:col-span-1">
           <div className="bg-white rounded-[20px] shadow-[0_8px_32px_rgba(0,132,61,0.08)] border border-ocp-100 p-6 text-center">
-            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-ocp-500 to-ocp-700 text-white flex items-center justify-center text-3xl font-bold mx-auto mb-4 shadow-lg shadow-ocp-500/20">
-              {initials}
+            <div className="relative w-24 h-24 mx-auto mb-4">
+              <label className="cursor-pointer block w-full h-full">
+                {photoPreview || user?.photo ? (
+                  <img src={photoPreview || user?.photo} alt="Photo" className="w-24 h-24 rounded-full object-cover shadow-lg shadow-ocp-500/20" />
+                ) : (
+                  <div className="w-24 h-24 rounded-full bg-gradient-to-br from-ocp-500 to-ocp-700 text-white flex items-center justify-center text-3xl font-bold shadow-lg shadow-ocp-500/20">
+                    {initials}
+                  </div>
+                )}
+                <div className="absolute inset-0 rounded-full bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+                  <i className="fas fa-camera text-white text-lg" />
+                </div>
+                <input type="file" accept="image/*" onChange={handlePhotoChange} className="hidden" />
+              </label>
             </div>
             <h2 className="font-semibold text-ocp-800 text-lg">{user.prenom} {user.nom}</h2>
             <span className="inline-block mt-1.5 px-3 py-1 rounded-full text-xs font-medium bg-ocp-50 text-ocp-600 border border-ocp-200">
