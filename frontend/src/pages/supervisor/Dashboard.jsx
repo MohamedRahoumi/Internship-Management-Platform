@@ -98,6 +98,7 @@ const Dashboard = () => {
                   <th className="text-left px-5 py-3.5 font-semibold text-ocp-700 text-xs uppercase tracking-wider hidden md:table-cell">Département</th>
                   <th className="text-left px-5 py-3.5 font-semibold text-ocp-700 text-xs uppercase tracking-wider">Statut</th>
                   <th className="text-left px-5 py-3.5 font-semibold text-ocp-700 text-xs uppercase tracking-wider hidden sm:table-cell">Date</th>
+                  <th className="text-right px-5 py-3.5 font-semibold text-ocp-700 text-xs uppercase tracking-wider">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -115,6 +116,17 @@ const Dashboard = () => {
                       </span>
                     </td>
                     <td className="px-5 py-3.5 text-gray-500 hidden sm:table-cell">{new Date(r.created_at).toLocaleDateString('fr-FR')}</td>
+                    <td className="px-5 py-3.5 text-right">
+                      <a
+                        href={r.file_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-sm font-semibold text-ocp-500 hover:text-ocp-700 transition-colors"
+                      >
+                        <i className="fas fa-download text-xs" />
+                        Télécharger
+                      </a>
+                    </td>
                   </tr>
                 ))}
               </tbody>
