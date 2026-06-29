@@ -40,7 +40,7 @@ const roleMenuItems = {
     { label: 'Mon profil', path: '/supervisor/profile', icon: 'profile' },
     { label: 'Mes stagiaires', path: '/supervisor/interns', icon: 'interns' },
     { label: 'Scanner', path: '/supervisor/scanner', icon: 'scanner' },
-    { label: 'Rapports', path: '/supervisor/reports', icon: 'report' },
+    { label: 'Rapports', path: '/supervisor/rapports', icon: 'report' },
     { label: 'Évaluations', path: '/supervisor/evaluations', icon: 'evaluations' },
   ],
   intern: [
