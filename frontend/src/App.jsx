@@ -20,6 +20,7 @@ import SupervisorDashboard from './pages/supervisor/Dashboard';
 import SupervisorInterns from './pages/supervisor/Interns';
 import SupervisorScanner from './pages/supervisor/Scanner';
 import SupervisorEvaluation from './pages/supervisor/Evaluation';
+import SupervisorReports from './pages/supervisor/Reports';
 import Profile from './pages/Profile';
 import InternDashboard from './pages/intern/Dashboard';
 import InternApplication from './pages/intern/Application';
@@ -62,6 +63,7 @@ const App = () => (
         <Route path="interns" element={<SupervisorInterns />} />
         <Route path="scanner" element={<SupervisorScanner />} />
         <Route path="evaluations" element={<SupervisorEvaluation />} />
+        <Route path="reports" element={<SupervisorReports />} />
         <Route path="profile" element={<Profile />} />
       </Route>
 
