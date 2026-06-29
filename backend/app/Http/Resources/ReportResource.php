@@ -8,7 +8,7 @@ class ReportResource extends JsonResource
 {
     public function toArray($request): array
     {
-        return [
+        $data = [
             'id' => $this->id,
             'intern_id' => $this->intern_id,
             'titre' => $this->titre,
@@ -17,6 +17,24 @@ class ReportResource extends JsonResource
             'status' => $this->status,
             'created_at' => $this->created_at,
         ];
+
+        if ($this->resource->relationLoaded('intern') && $this->intern) {
+            $internData = ['id' => $this->intern->id];
+            if ($this->intern->relationLoaded('user') && $this->intern->user) {
+                $internData['user'] = [
+                    'prenom' => $this->intern->user->prenom,
+                    'nom' => $this->intern->user->nom,
+                ];
+            }
+            if ($this->intern->relationLoaded('department') && $this->intern->department) {
+                $internData['department'] = [
+                    'name' => $this->intern->department->name,
+                ];
+            }
+            $data['intern'] = $internData;
+        }
+
+        return $data;
     }
 }
 
