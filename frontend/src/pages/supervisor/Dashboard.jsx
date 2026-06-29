@@ -1,16 +1,28 @@
 import { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import api from '../../api/axios';
 import Loading from '../../components/ui/Loading';
+import Alert from '../../components/ui/Alert';
+
+const statusLabels = { submitted: 'Soumis', under_review: 'En cours', approved: 'Approuvé', rejected: 'Refusé' };
+const statusColors = { submitted: 'bg-yellow-100 text-yellow-800', under_review: 'bg-blue-100 text-blue-800', approved: 'bg-green-100 text-green-800', rejected: 'bg-red-100 text-red-800' };
 
 const Dashboard = () => {
   const [stats, setStats] = useState(null);
+  const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState({});
   const initialized = useRef(false);
 
   useEffect(() => {
-    api.get('/dashboard/supervisor')
-      .then((res) => setStats(res.data))
+    Promise.all([
+      api.get('/dashboard/supervisor'),
+      api.get('/reports/supervisor/all'),
+    ])
+      .then(([s, r]) => {
+        setStats(s.data);
+        setReports(r.data);
+      })
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
@@ -66,6 +78,49 @@ const Dashboard = () => {
             <div className="text-[0.8rem] text-gray-500 font-medium mt-0.5">{card.label}</div>
           </div>
         ))}
+      </div>
+
+      {/* Rapports soumis */}
+      <div className={`transition-all duration-600 ease-out ${visible[6] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
+        <div className="flex items-center justify-between mb-4 mt-2">
+          <h2 className="text-lg font-bold text-ocp-700">Rapports soumis par mes stagiaires</h2>
+          <Link to="/supervisor/interns" className="text-sm text-ocp-500 font-semibold hover:underline">Voir tous</Link>
+        </div>
+        {reports.length === 0 ? (
+          <Alert type="info">Aucun rapport soumis pour le moment.</Alert>
+        ) : (
+          <div className="bg-white rounded-[20px] shadow-[0_8px_32px_rgba(0,132,61,0.08)] border border-ocp-100 overflow-hidden">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-ocp-100 bg-ocp-50/50">
+                  <th className="text-left px-5 py-3.5 font-semibold text-ocp-700 text-xs uppercase tracking-wider">Stagiaire</th>
+                  <th className="text-left px-5 py-3.5 font-semibold text-ocp-700 text-xs uppercase tracking-wider hidden sm:table-cell">Titre</th>
+                  <th className="text-left px-5 py-3.5 font-semibold text-ocp-700 text-xs uppercase tracking-wider hidden md:table-cell">Département</th>
+                  <th className="text-left px-5 py-3.5 font-semibold text-ocp-700 text-xs uppercase tracking-wider">Statut</th>
+                  <th className="text-left px-5 py-3.5 font-semibold text-ocp-700 text-xs uppercase tracking-wider hidden sm:table-cell">Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {reports.map((r) => (
+                  <tr key={r.id} className="border-b border-ocp-50 hover:bg-ocp-50/30 transition-colors">
+                    <td className="px-5 py-3.5">
+                      <div className="font-medium text-ocp-700">{r.intern?.user?.prenom} {r.intern?.user?.nom}</div>
+                      <div className="text-xs text-gray-500 sm:hidden">{r.titre || '—'}</div>
+                    </td>
+                    <td className="px-5 py-3.5 text-gray-600 hidden sm:table-cell">{r.titre || '—'}</td>
+                    <td className="px-5 py-3.5 text-gray-600 hidden md:table-cell">{r.intern?.department?.name || '—'}</td>
+                    <td className="px-5 py-3.5">
+                      <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${statusColors[r.status] || 'bg-gray-100 text-gray-700'}`}>
+                        {statusLabels[r.status] || r.status}
+                      </span>
+                    </td>
+                    <td className="px-5 py-3.5 text-gray-500 hidden sm:table-cell">{new Date(r.created_at).toLocaleDateString('fr-FR')}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );

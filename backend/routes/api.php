@@ -47,6 +47,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/reports/my-report', [ReportController::class, 'myReport']);
     Route::get('/reports/{id}', [ReportController::class, 'show']);
     Route::get('/reports/intern/{internId}', [ReportController::class, 'internReport']);
+    Route::get('/reports/supervisor/all', [ReportController::class, 'supervisorReports']);
 
     Route::get('/evaluations/my-evaluation', [EvaluationController::class, 'myEvaluation']);
     Route::get('/evaluations', [EvaluationController::class, 'index']);

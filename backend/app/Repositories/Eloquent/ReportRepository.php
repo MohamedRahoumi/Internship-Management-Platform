@@ -29,6 +29,13 @@ class ReportRepository implements ReportRepositoryInterface
         return InternshipReport::where('intern_id', $internId)->first();
     }
 
+    public function findBySupervisor(int $supervisorId)
+    {
+        return InternshipReport::whereHas('intern', function ($q) use ($supervisorId) {
+            $q->where('supervisor_id', $supervisorId);
+        })->with('intern.user', 'intern.department')->latest()->get();
+    }
+
     public function create(array $data): InternshipReport
     {
         return InternshipReport::create($data);

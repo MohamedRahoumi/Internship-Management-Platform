@@ -59,6 +59,12 @@ class ReportController extends Controller
         return response()->json(new ReportResource($report));
     }
 
+    public function supervisorReports(Request $request): JsonResponse
+    {
+        $reports = $this->reportService->getBySupervisor($request->user()->id);
+        return response()->json(ReportResource::collection($reports));
+    }
+
     public function internReport(int $internId): JsonResponse
     {
         $report = $this->reportService->findByIntern($internId);

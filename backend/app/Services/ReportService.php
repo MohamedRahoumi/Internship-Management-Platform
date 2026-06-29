@@ -30,6 +30,11 @@ class ReportService
         return $this->reportRepository->findByIntern($internId);
     }
 
+    public function getBySupervisor(int $supervisorId)
+    {
+        return $this->reportRepository->findBySupervisor($supervisorId);
+    }
+
     public function findById(int $id): ?InternshipReport
     {
         return $this->reportRepository->findById($id);
